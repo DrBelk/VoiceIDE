@@ -9,7 +9,7 @@ class attribute(object):
 
     def __init__(self, _name, _sounds, _value):
         self.name = _name
-        self.sounds = [_sounds] if isinstance(b, str) else list(_value)
+        self.sounds = [_sounds] if isinstance(_sounds, str) else list(_value)
         self.value = _value
         
 

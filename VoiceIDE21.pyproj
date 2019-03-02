@@ -27,7 +27,13 @@
     <Compile Include="attribute.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CommandType.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="constants.py" />
+    <Compile Include="ContextHistory.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="helpFunctions.py" />
     <Compile Include="internal_representations\Class.py" />
     <Compile Include="internal_representations\Method.py" />
