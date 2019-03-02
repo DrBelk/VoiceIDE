@@ -7,7 +7,7 @@ class WordHandler(object):
     def __init__(self):
         self.morph = pymorphy2.MorphAnalyzer()
         self.abstract = abstractObject()
-        self.context = 
+        self.context = abstractObject()
 
     def sendWord(self, word):
         """Processes a word from any word generator depending on the current state"""
@@ -24,11 +24,13 @@ class WordHandler(object):
     def try_apply(self, p):
         if "INFN" in p.tag:
             self.parseAction(p)
-            return True
-        if "NOUN" in p.tag:
+        elif "NOUN" in p.tag:
             parseObjectType(p)
-            return True
-        return False
+        elif "VERB" in p.tag:
+            pass # can be part of "наследуется от"
+        else:
+            return False
+        return True
 
     def completePast(self):
         self.abstract = abstractObject()

@@ -6,13 +6,9 @@ class binaryAttribute():
 
 
 class abstractObject(object):
-    """This class represents abstract language terminal"""
+    """This class represents abstract language construction"""
     type = languageType.NODEF
-    binary_attributes = {}
-
-
-
-
+    attributes = {}
 
 class languageType(Enum):
     NODEF           = auto()
@@ -22,3 +18,4 @@ class languageType(Enum):
     VARIABLE        = auto()
     CYCLE           = auto()
     CONDITION       = auto()
+    PARAMETER       = auto()

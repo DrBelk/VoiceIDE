@@ -24,9 +24,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="abstractObject.py" />
+    <Compile Include="attribute.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="constants.py" />
     <Compile Include="helpFunctions.py" />
-    <Compile Include="internal_representations\class.py" />
+    <Compile Include="internal_representations\Class.py" />
     <Compile Include="internal_representations\Method.py" />
     <Compile Include="soundHandler.py" />
     <Compile Include="VoiceIDE2.py" />
