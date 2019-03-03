@@ -27,6 +27,9 @@
     <Compile Include="attribute.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="internal_representations\Class.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="CommandType.py">
       <SubType>Code</SubType>
     </Compile>
@@ -35,8 +38,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="helpFunctions.py" />
-    <Compile Include="internal_representations\Class.py" />
     <Compile Include="internal_representations\Method.py" />
+    <Compile Include="languageType.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="soundHandler.py" />
     <Compile Include="VoiceIDE2.py" />
     <Compile Include="WordHandler.py" />

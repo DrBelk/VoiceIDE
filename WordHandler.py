@@ -1,8 +1,10 @@
 import pymorphy2
 from abstractObject import *
-from attribute import multiAttribute
+from attribute import *
 from CommandType import CommandType
 from ContextHistory import ContextHistory
+from languageType import languageType
+from helpFunctions import (contextList2str, str2)
 
 class WordHandler(object):
     """Handles words"""
@@ -13,10 +15,8 @@ class WordHandler(object):
         self.action = CommandType.NODEF         # just init value
 
         # init context object (consists an array of all the code objects)
-        self.context = abstractObject(languageType.CODE)
-        body = multiAttribute("body", [], [])
-        self.context.attributes[body.name] = body
-        
+        self.context = []
+        self.focus = self.context
         self.completePast()
 
     def completePast(self):
@@ -38,6 +38,18 @@ class WordHandler(object):
 
         if not handled:
             pass # take a word from English line
+        else:
+            self.updateContext()
+
+        return contextList2str(self.context)
+
+    def updateContext(self):
+        # TODO: change the focus if where object is defined and found
+        # load old command context, not just = operator to keep self.focus as pointer
+        self.context.clear()
+        self.context.extend(self.history.getCurrContext())
+        if self.action == CommandType.CREATE:
+            self.focus.append(self.what)
 
     def try_apply(self, p):
         if "INFN" in p.tag:
@@ -73,10 +85,13 @@ class WordHandler(object):
         # parse new object
         self.what.type = languageType.getType(p.normal_form)
         assert self.what.type != languageType.NODEF, "Unknown object type!"
+        # change abstract class to special one
+        self.what = languageType.getClass(self.what.type, self.what.attributes)
 
     def parseName(self, p):
         # parse name of the object
-        if not "name" in self.what.attributes:
-            self.what.attributes["name"] = p.normal_form.lower()
-        else:
-            self.what.attributes["name"] += p.normal_form[0].title() + p.normal_form[1:].lower()
+        if "name" in self.what.attributes:
+            if not self.what.attributes["name"].value:
+                self.what.attributes["name"].value = p.normal_form.lower()
+            else:
+                self.what.attributes["name"].value += p.normal_form[0].title() + p.normal_form[1:].lower()

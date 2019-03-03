@@ -4,6 +4,9 @@ from constants import MIN_SOUND_DIFF
 def list2str(list):
 	return ",".join([str(e) for e in list])
 
+def contextList2str(list):
+	return "\n\n".join([str(e) for e in list])
+
 def printlist(list):
 	for i, e in enumerate(list):
 		print (i, ':', e)

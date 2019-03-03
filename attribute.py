@@ -9,7 +9,7 @@ class attribute(object):
 
     def __init__(self, _name, _sounds, _value):
         self.name = _name
-        self.sounds = [_sounds] if isinstance(_sounds, str) else list(_value)
+        self.sounds = [_sounds] if isinstance(_sounds, str) else list(_sounds)
         self.value = _value
         
 
@@ -30,7 +30,6 @@ class stringAttribute(attribute):
     def __init__(self, _name, _sounds, _value):
         assert isinstance(_value, str), "Value type is not string!"
         return super().__init__(_name, _sounds, _value)
-            
 
 class multiAttribute(attribute):
     """value type is list"""
