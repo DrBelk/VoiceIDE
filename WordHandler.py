@@ -14,9 +14,10 @@ class WordHandler(object):
         self.history = ContextHistory()         # we do not need to clear history for every command
         self.action = CommandType.NODEF         # just init value
 
-        # init context object (consists an array of all the code objects)
+        # init context object (consists an array of all the code objects) and focus
         self.context = []
         self.focus = self.context
+        # init other objects that should be reinited every command
         self.completePast()
 
     def completePast(self):
@@ -66,21 +67,21 @@ class WordHandler(object):
         return True
 
     def parseAction(self, p):
+        if self.action != CommandType.UNDO and self.action != CommandType.REDO:
+            self.completePast()
+
         # parse new action
         self.action = CommandType.getAction(p.word)
         assert self.action != CommandType.NODEF, "Unknown infinitive verb!"
 
         # check if action is editor command
+        if self.action == CommandType.REDO:
+            self.context.clear()
+            self.context.extend(self.history.redo())
         if self.action == CommandType.UNDO:
-            print ('[parseAction] undo')
-            self.context = self.history.undo()
-        elif self.action == CommandType.REDO:
-            print ('[parseAction] redo')
-            self.context = self.history.redo()
-        else:
-            # save surrent state before any changes
-            self.completePast()
-                        
+            self.context.clear()
+            self.context.extend(self.history.undo())
+
     def parseObjectType(self, p):
         # parse new object
         self.what.type = languageType.getType(p.normal_form)

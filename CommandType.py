@@ -20,7 +20,7 @@ class CommandType(Enum):
         if id == CommandType.UNDO:
             return ['отменить', 'назад']
         if id == CommandType.REDO:
-            return ['ой', 'вернуть']
+            return ['вернуть']
         if id == CommandType.NODEF:
             return []
 
