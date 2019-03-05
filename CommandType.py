@@ -28,9 +28,8 @@ class CommandType(Enum):
         print('[getAction]+')
         for cmd in CommandType:
             for cmdSound in CommandType.getSounds(cmd):
-                print('[getAction] handle sound', cmdSound)
                 if soundDiff(cmdSound, word):
                     print('[getAction] cmd founded:', cmd)
                     return cmd
         print('[getAction] cmd did not found')
-        return NODEF
+        return CommandType.NODEF

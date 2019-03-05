@@ -1,6 +1,7 @@
 from abstractObject import abstractObject
 from attribute import *
 from languageType import languageType
+from helpFunctions import str2
 
 class Class(abstractObject):
     """Represents C++ class"""
@@ -24,6 +25,6 @@ class Class(abstractObject):
         str += self.attributes["name"].value if self.attributes["name"].value else "unnamedClass" 
         str += " {\n"
         for body_element in self.attributes["body"].value: 
-            str += str2(body_element).replace("\n", "\n\t") + "\n"
+            str += "\t" + str2(body_element).replace("\n", "\n\t") + "\n"
         str += "}"
-        return str
+        return str.replace("\t", " " * 4)

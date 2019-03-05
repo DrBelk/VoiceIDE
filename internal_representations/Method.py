@@ -1,6 +1,7 @@
 from abstractObject import *
 from attribute import *
 from languageType import languageType
+from helpFunctions import str2
 
 class Method(abstractObject):
     """Represents C++ method"""
@@ -34,6 +35,6 @@ class Method(abstractObject):
             str += str2(param) + ", "
         str += ") {\n"
         for body_element in self.attributes["body"].value:
-            str += str2(body_element) + "\n"
+            str += "\t" + str2(body_element).replace("\n", "\n\t") + "\n"
         str += "}"
-        return str
+        return str.replace("\t", " " * 4)

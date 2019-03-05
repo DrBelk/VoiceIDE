@@ -61,9 +61,8 @@ class languageType(Enum):
         print('[getType]+')
         for type in languageType:
             for typeSound in languageType.getSounds(type):
-                print('[getType] handle sound', typeSound)
                 if soundDiff(typeSound, word):
                     print('[getType] type founded:', type)
                     return type
         print('[getType] type did not found')
-        return NODEF
+        return languageType.NODEF
