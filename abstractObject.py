@@ -14,7 +14,6 @@ class abstractObject(object):
         return self.__repr__()
 
     def searchObject(self, attribute_sound, object):
-        #TODO: maybe we are intrested not only in the type
         if self.type == object.type:
             # check if there is some attribute with given sound
             does_given_sound_represent_attribute = False
@@ -24,16 +23,13 @@ class abstractObject(object):
                     searched_attr = attr.value
                     break
             if does_given_sound_represent_attribute:
-                # TODO: check all defined attributes like a name
-                # this implementation is wrong because of body attribure that is changing
-                is_all_attributes_equal = True
-                #for search_object_attr in object.attributes.values():
-                #    if search_object_attr.value and \
-                #       search_object_attr.value != self.attributes[search_object_attr.name].value:
-                #        is_all_attributes_equal = False
-                #        break
-                if is_all_attributes_equal:
+                #check if the name of the object is the same
+                if "name" in self.attributes and "name" in object.attributes:
+                    if self.attributes["name"].value == object.attributes["name"].value:
+                        return searched_attr
+                else:
                     return searched_attr
+                #return searched_attr
         for attr in self.attributes.values():
             res = attr.searchObject(attribute_sound, object)
             if res is not None: return res

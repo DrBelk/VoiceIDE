@@ -16,7 +16,7 @@ class CommandType(Enum):
         if id == CommandType.DELETE:
             return ['удалить', 'вырезать']
         if id == CommandType.CHANGE:
-            return ['изменить', 'поменять']
+            return ['изменить', 'поменять', 'редактировать']
         if id == CommandType.UNDO:
             return ['отменить', 'назад']
         if id == CommandType.REDO:

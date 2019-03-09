@@ -75,15 +75,15 @@ class WordHandler(object):
         self.context.clear()
         self.context.extend(self.history.getCurrContext())
         
+        # check if WHERE object is finally defined enough
         if self.where.type != languageType.NODEF:
-            self.focus = findWhereInContext(self.context, attr_name, self.where)
-            self.where = abstractObject(languageType.NODEF) # clear temporary used WHERE object
+            find_res = findWhereInContext(self.context, attr_name, self.where)
+            if find_res is not None:
+                self.focus = find_res
+                self.where = abstractObject(languageType.NODEF) # clear temporary used WHERE object
 
         if self.action == CommandType.CREATE:
             self.focus.append(self.what)
-        elif self.action == CommandType.CHANGE:
-            self.focus.append("FOCUS")
-            pass
         
 
     def try_apply(self, p):
