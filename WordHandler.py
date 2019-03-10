@@ -46,7 +46,7 @@ class WordHandler(object):
         return contextList2str(self.context)
 
     def updateContext(self):
-        def findWhereInContext(context, what, where):
+        def findInContext(context, what, where):
             for object in context:
                 res = object.searchObject(what, where)
                 if res is not None: return res
@@ -54,9 +54,16 @@ class WordHandler(object):
 
         def restoreWhereAndName(context, searched_id):
             for object in context:
-                res = object.get_attr_id_name_and_id_parent(searched_id)
+                res = object.getAttrIdAndSound(searched_id)
                 if res is not None: return res
             return None
+
+        def getParent(context, child_id):
+            for object in context:
+                res = object.getParent(child_id)    
+                if res is not None: return res
+            # if res is None parent is context
+            return context
 
         # change the focus if where object is defined
         if self.where.type != languageType.NODEF:
@@ -77,13 +84,22 @@ class WordHandler(object):
         
         # check if WHERE object is finally defined enough
         if self.where.type != languageType.NODEF:
-            find_res = findWhereInContext(self.context, attr_name, self.where)
+            find_res = findInContext(self.context, attr_name, self.where)
             if find_res is not None:
                 self.focus = find_res
                 self.where = abstractObject(languageType.NODEF) # clear temporary used WHERE object
 
         if self.action == CommandType.CREATE:
             self.focus.append(self.what)
+        if self.action == CommandType.DELETE:
+            # find WHAT object in the context
+            find_res = findInContext(self.context, None, self.what)
+            if find_res is not None:
+                parent = getParent(self.context, id(find_res))
+                assert isinstance(parent, list), "DELETE find res is not a list"
+                for object in parent:
+                    if id(find_res) == id(object):
+                        parent.remove(object)
         
 
     def try_apply(self, p):
@@ -119,7 +135,7 @@ class WordHandler(object):
             self.context.extend(self.history.undo())
 
     def parseWhatObject(self, p):
-        if self.action == CommandType.CREATE:
+        if self.action == CommandType.CREATE or self.action == CommandType.DELETE:
             # parse new object
             self.what.type = languageType.getType(p.normal_form)
             assert self.what.type != languageType.NODEF, "Unknown WHAT object type!"

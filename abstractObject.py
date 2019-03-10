@@ -14,33 +14,45 @@ class abstractObject(object):
         return self.__repr__()
 
     def searchObject(self, attribute_sound, object):
-        if self.type == object.type:
-            # check if there is some attribute with given sound
-            does_given_sound_represent_attribute = False
-            for attr in self.attributes.values():
-                if attr.isWordThisAttribute(attribute_sound):
-                    does_given_sound_represent_attribute = True
-                    searched_attr = attr.value
-                    break
-            if does_given_sound_represent_attribute:
-                #check if the name of the object is the same
-                if "name" in self.attributes and "name" in object.attributes:
-                    if self.attributes["name"].value == object.attributes["name"].value:
+        if attribute_sound is None:
+            # link to an object is reqired
+            if self.type == object.type:
+                #check if the name of the self object is the same
+                if "name" in self.attributes and "name" in object.attributes and \
+                    self.attributes["name"].value == object.attributes["name"].value:
+                    return self
+        else:
+            # link to an attribute is reqired
+            if self.type == object.type:
+                # check if there is some attribute with given sound
+                does_given_sound_represent_attribute = False
+                for attr in self.attributes.values():
+                    if attr.isWordThisAttribute(attribute_sound):
+                        does_given_sound_represent_attribute = True
+                        searched_attr = attr.value
+                        break
+                if does_given_sound_represent_attribute:
+                    #check if the name of the object is the same
+                    if "name" in self.attributes and "name" in object.attributes and \
+                        self.attributes["name"].value == object.attributes["name"].value:
                         return searched_attr
-                else:
-                    return searched_attr
-                #return searched_attr
         for attr in self.attributes.values():
             res = attr.searchObject(attribute_sound, object)
             if res is not None: return res
         return None
 
-    def get_attr_id_name_and_id_parent(self, searched_id):
+    def getAttrIdAndSound(self, searched_id):
         # check if any attr has provided id
         for attr in self.attributes.values():
             if searched_id == id(attr.value):
                 return (self, attr.sounds[0])
         for attr in self.attributes.values():
-            res = attr.get_attr_id_name_and_id_parent(searched_id)
+            res = attr.getAttrIdAndSound(searched_id)
+            if res is not None: return res
+        return None
+
+    def getParent(self, child_id):
+        for attr in self.attributes.values():
+            res = attr.getParent(child_id)
             if res is not None: return res
         return None
