@@ -11,6 +11,7 @@ class languageType(Enum):
     METHOD          = auto()
     EXPRESSION      = auto()
     VARIABLE        = auto()
+    VARIABLE_DEF    = auto()
     CYCLE           = auto()
     CONDITION       = auto()
     PARAMETER       = auto()
@@ -28,6 +29,8 @@ class languageType(Enum):
             return ['выражение']
         if id == languageType.VARIABLE:
             return ['переменная']
+        if id == languageType.VARIABLE_DEF:
+            return ['определение'] # TODO: more than 1 word sound?
         if id == languageType.CYCLE:
             return ['цикл']
         if id == languageType.CONDITION:
@@ -49,6 +52,8 @@ class languageType(Enum):
         if id == languageType.EXPRESSION:
             return None
         if id == languageType.VARIABLE:
+            return None
+        if id == languageType.VARIABLE_DEF:
             return None
         if id == languageType.CYCLE:
             return None

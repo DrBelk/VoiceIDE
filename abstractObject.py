@@ -8,7 +8,7 @@ class abstractObject(object):
         self.attributes = {}
 
     def __repr__(self):
-        return "Waiting for details..."
+        return "//Waiting for details..."
 
     def __str__(self):
         return self.__repr__()
