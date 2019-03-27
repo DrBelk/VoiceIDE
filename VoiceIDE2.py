@@ -21,7 +21,6 @@ class VoiceIDE(App):
         self.wh = WordHandler.WordHandler()
         listener = threading.Thread(target=self.soundHandle)
         self.code_out = CodeInput(lexer = CppLexer(), readonly = True)
-        #self.code_out = CodeInput(lexer = CppLexer())
 
         self.mic_button = Button(text='Включить микрофон')
         self.mic_button.bind(on_press = self.switchMic)
@@ -73,9 +72,6 @@ class VoiceIDE(App):
 
 if __name__ == '__main__':
     VoiceIDE().run()
-	#app = QApplication(sys.argv)
-	#w = Window()
-	#sys.exit(app.exec_())
 
 
 

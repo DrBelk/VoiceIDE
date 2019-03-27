@@ -39,6 +39,9 @@
     </Compile>
     <Compile Include="helpFunctions.py" />
     <Compile Include="internal_representations\Method.py" />
+    <Compile Include="internal_representations\variableDefenition.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="languageType.py">
       <SubType>Code</SubType>
     </Compile>

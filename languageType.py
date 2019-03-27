@@ -9,9 +9,9 @@ class languageType(Enum):
     CODE            = auto()
     CLASS           = auto()
     METHOD          = auto()
-    EXPRESSION      = auto()
     VARIABLE        = auto()
     VARIABLE_DEF    = auto()
+    ARRAY_DEF       = auto()
     CYCLE           = auto()
     CONDITION       = auto()
     PARAMETER       = auto()
@@ -25,12 +25,12 @@ class languageType(Enum):
             return ['класс', 'объект']
         if id == languageType.METHOD:
             return ['метод', 'функция']
-        if id == languageType.EXPRESSION:
-            return ['выражение']
         if id == languageType.VARIABLE:
             return ['переменная']
         if id == languageType.VARIABLE_DEF:
             return ['определение'] # TODO: more than 1 word sound?
+        if id == languageType.ARRAY_DEF:
+            return ['определение'] 
         if id == languageType.CYCLE:
             return ['цикл']
         if id == languageType.CONDITION:
@@ -41,6 +41,8 @@ class languageType(Enum):
     def getClass(id, attributes):
         from Class import Class
         from Method import Method
+        from variableDefenition import variableDefenition
+
         if id == languageType.NODEF:
             return None
         if id == languageType.CODE:
@@ -49,11 +51,11 @@ class languageType(Enum):
             return Class(attributes)
         if id == languageType.METHOD:
             return Method(attributes)
-        if id == languageType.EXPRESSION:
-            return None
         if id == languageType.VARIABLE:
             return None
         if id == languageType.VARIABLE_DEF:
+            return variableDefenition(attributes)
+        if id == languageType.ARRAY_DEF:
             return None
         if id == languageType.CYCLE:
             return None
