@@ -19,12 +19,15 @@ from pygments.lexers.c_cpp import CppLexer
 class VoiceIDE(App):
     def __init__(self):
         self.wh = WordHandler.WordHandler()
+        
         listener = threading.Thread(target=self.soundHandle)
         self.code_out = CodeInput(lexer = CppLexer(), readonly = True)
 
         self.mic_button = Button(text='Включить микрофон')
         self.mic_button.bind(on_press = self.switchMic)
 
+        # give init context representation
+        self.code_out.text = self.wh.sendWord("")
         return super().__init__()
 
     def build(self):

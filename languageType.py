@@ -7,6 +7,7 @@ from helpFunctions import soundDiff
 class languageType(Enum):
     NODEF           = auto()
     CODE            = auto()
+    FOCUS           = auto()
     CLASS           = auto()
     METHOD          = auto()
     VARIABLE        = auto()
@@ -17,59 +18,47 @@ class languageType(Enum):
     PARAMETER       = auto()
 
     def getSounds(id):
-        if id == languageType.NODEF:
-            return []
-        if id == languageType.CODE:
-            return []
-        if id == languageType.CLASS:
-            return ['класс', 'объект']
-        if id == languageType.METHOD:
-            return ['метод', 'функция']
-        if id == languageType.VARIABLE:
-            return ['переменная']
-        if id == languageType.VARIABLE_DEF:
-            return ['определение'] # TODO: more than 1 word sound?
-        if id == languageType.ARRAY_DEF:
-            return ['определение'] 
-        if id == languageType.CYCLE:
-            return ['цикл']
-        if id == languageType.CONDITION:
-            return ['условие']
-        if id == languageType.PARAMETER:
-            return ["параметр"]
+        sounds = {
+            languageType.NODEF:         [],
+            languageType.CODE:          [],
+            languageType.FOCUS:         [],
+            languageType.CLASS:         ['класс', 'объект'],
+            languageType.METHOD:        ['метод', 'функция'],
+            languageType.VARIABLE:      ['переменная'],
+            languageType.VARIABLE_DEF:  ['определение'], # TODO: more than 1 word sound?
+            languageType.ARRAY_DEF:     ['определение2'],
+            languageType.CYCLE:         ['цикл'],
+            languageType.CONDITION:     ['условие'],
+            languageType.PARAMETER:     ["параметр"]
+                 }
+        return sounds[id]
 
-    def getClass(id, attributes):
+    def getClass(id, attributes = {}):
         from Class import Class
         from Method import Method
+        from Focus import Focus
         from variableDefenition import variableDefenition
-
-        if id == languageType.NODEF:
-            return None
-        if id == languageType.CODE:
-            return None
-        if id == languageType.CLASS:
-            return Class(attributes)
-        if id == languageType.METHOD:
-            return Method(attributes)
-        if id == languageType.VARIABLE:
-            return None
-        if id == languageType.VARIABLE_DEF:
-            return variableDefenition(attributes)
-        if id == languageType.ARRAY_DEF:
-            return None
-        if id == languageType.CYCLE:
-            return None
-        if id == languageType.CONDITION:
-            return None
-        if id == languageType.PARAMETER:
-            return None
+        class_type = {
+            languageType.NODEF:         None,
+            languageType.CODE:          None,
+            languageType.FOCUS:         Focus(attributes),
+            languageType.CLASS:         Class(attributes),
+            languageType.METHOD:        Method(attributes),
+            languageType.VARIABLE:      None,
+            languageType.VARIABLE_DEF:  variableDefenition(attributes),
+            languageType.ARRAY_DEF:     None,
+            languageType.CYCLE:         None,
+            languageType.CONDITION:     None,
+            languageType.PARAMETER:     None
+                    }      
+        return class_type[id]
 
     def getType(word):
         print('[getType]+')
         for type in languageType:
             for typeSound in languageType.getSounds(type):
                 if soundDiff(typeSound, word):
-                    print('[getType] type founded:', type)
+                    print('[getType] type found:', type)
                     return type
         print('[getType] type did not found')
         return languageType.NODEF

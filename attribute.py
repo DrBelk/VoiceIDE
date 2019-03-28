@@ -1,5 +1,6 @@
 from helpFunctions import soundDiff
 from constants import MIN_SOUND_DIFF
+from languageType import languageType
 
 class attribute(object):
     """Abstract attribute object"""
@@ -25,6 +26,9 @@ class attribute(object):
         return None
 
     def getParent(self, id):
+        return None
+
+    def getFocusParent(self):
         return None
 
 class binaryAttribute(attribute):
@@ -62,5 +66,13 @@ class multiAttribute(attribute):
             if id(object) == child_id:
                 return self.value
             res = object.getParent(child_id)
+            if res is not None: return res
+        return None
+
+    def getFocusParent(self):
+        for object in self.value:
+            if object.type == languageType.FOCUS:
+                return self.value
+            res = object.getFocusParent()
             if res is not None: return res
         return None

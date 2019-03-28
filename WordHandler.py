@@ -15,7 +15,7 @@ class WordHandler(object):
         self.action = CommandType.NODEF         # just init value
 
         # init context object (consists an array of all the code objects) and focus
-        self.context = []
+        self.context = [languageType.getClass(languageType.FOCUS)]
         self.focus = self.context
         # init other objects that should be reinited every command
         self.completePast()
@@ -30,6 +30,9 @@ class WordHandler(object):
     def sendWord(self, word):
         """Processes a word from any word generator depending on the current state"""
         print('[sendWord] hanlde word:', word)
+        # request of empty word means no changes
+        if not word:
+            return contextList2str(self.context)
         parse = self.morph.parse(word)
         
         handled = False
@@ -48,11 +51,12 @@ class WordHandler(object):
     def updateContext(self):
         def findInContext(context, what, where):
             for object in context:
-                res = object.searchObject(what, where)
+                res = object.searchObject(attribute_sound = what, 
+                                          object = where)
                 if res is not None: return res
             return None
 
-        def restoreWhereAndName(context, searched_id):
+        def getWhereAndName(context, searched_id):
             for object in context:
                 res = object.getAttrIdAndSound(searched_id)
                 if res is not None: return res
@@ -65,15 +69,19 @@ class WordHandler(object):
             # if res is None parent is context
             return context
 
-        # change the focus if where object is defined
-        if self.where.type != languageType.NODEF:
-            # we expect attribute name in WHAT object
-            attr_name = self.what
-        elif self.focus is not self.context:
-            # load WHERE object to restore focus reference
-            (self.where, attr_name) = restoreWhereAndName(self.context, id(self.focus))
+        def getFocusParent(context):
+            for object in context:
+                res = object.getFocusParent()    
+                if res is not None: return res
+            return context
 
-        assert self.focus is not None, "Focus is None!"
+        def moveFocus(_from, _to):
+            for object in _from:
+                if object.type == languageType.FOCUS:
+                    _from.remove(object)
+                    break
+            _to.append(languageType.getClass(languageType.FOCUS))
+            return _to
 
         # если фокус не на самом контексте, мы теряем ссылку, поэтому найдем на какой объект ссылается фокус и присвоим self.where его
         # нам это нужно делать до перезаписи контекста историей
@@ -81,13 +89,18 @@ class WordHandler(object):
         # load old command context, not just = operator to keep self.focus as pointer
         self.context.clear()
         self.context.extend(self.history.getCurrContext())
-        
-        # check if WHERE object is finally defined enough
+
+        # find focus
+        self.focus = getFocusParent(self.context)
+
+        # if focus is going to be changed
         if self.where.type != languageType.NODEF:
-            find_res = findInContext(self.context, attr_name, self.where)
+            assert isinstance(self.what, str), "WHAT object is not a string"
+            # we expect attribute name in WHAT object
+            find_res = findInContext(self.context, self.what, self.where)
             if find_res is not None:
-                self.focus = find_res
-                self.where = abstractObject(languageType.NODEF) # clear temporary used WHERE object
+                self.focus = moveFocus(_from = self.focus,
+                                       _to = find_res)
 
         if self.action == CommandType.CREATE:
             self.focus.append(self.what)
@@ -100,7 +113,10 @@ class WordHandler(object):
                 for object in parent:
                     if id(find_res) == id(object):
                         parent.remove(object)
-        
+
+        # to keep FOCUS the last in the object array
+        self.focus = moveFocus(_from = self.focus,
+                                _to = self.focus)
 
     def try_apply(self, p):
         if "INFN" in p.tag:

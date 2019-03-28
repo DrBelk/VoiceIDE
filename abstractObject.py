@@ -8,7 +8,7 @@ class abstractObject(object):
         self.attributes = {}
 
     def __repr__(self):
-        return "//Waiting for details..."
+        return "// Waiting for details..."
 
     def __str__(self):
         return self.__repr__()
@@ -54,5 +54,11 @@ class abstractObject(object):
     def getParent(self, child_id):
         for attr in self.attributes.values():
             res = attr.getParent(child_id)
+            if res is not None: return res
+        return None
+
+    def getFocusParent(self):
+        for attr in self.attributes.values():
+            res = attr.getFocusParent()
             if res is not None: return res
         return None
