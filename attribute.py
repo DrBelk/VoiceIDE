@@ -15,7 +15,7 @@ class attribute(object):
 
     def isWordThisAttribute(self, word):
         for sound in self.sounds:
-            if soundDiff(sound, word) > MIN_SOUND_DIFF:
+            if soundDiff(sound, word):
                 return True
         return False
 

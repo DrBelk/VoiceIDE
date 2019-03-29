@@ -13,6 +13,7 @@ class WordHandler(object):
         self.morph = pymorphy2.MorphAnalyzer()  # we do not need to clear parser for every command
         self.history = ContextHistory()         # we do not need to clear history for every command
         self.action = CommandType.NODEF         # just init value
+        self.type_part = ""
 
         # init context object (consists an array of all the code objects) and focus
         self.context = [languageType.getClass(languageType.FOCUS)]
@@ -83,9 +84,6 @@ class WordHandler(object):
             _to.append(languageType.getClass(languageType.FOCUS))
             return _to
 
-        # если фокус не на самом контексте, мы теряем ссылку, поэтому найдем на какой объект ссылается фокус и присвоим self.where его
-        # нам это нужно делать до перезаписи контекста историей
-
         # load old command context, not just = operator to keep self.focus as pointer
         self.context.clear()
         self.context.extend(self.history.getCurrContext())
@@ -119,16 +117,19 @@ class WordHandler(object):
                                 _to = self.focus)
 
     def try_apply(self, p):
+        # very specific situation
+        if self.what.type == languageType.PART:
+            return self.parseWhatObject(p)
         if "INFN" in p.tag:
-            self.parseAction(p)
+            return self.parseAction(p)
         elif {"NOUN", "accs"} in p.tag:
-            self.parseWhatObject(p)
+            return self.parseWhatObject(p)
         elif {"NOUN", "gent"} in p.tag:
-            self.parseWhereObject(p)
+            return self.parseWhereObject(p)
         elif "VERB" in p.tag:
             pass # can be part of "наследуется от"
         elif "LATN" in p.tag:
-            self.parseName(p)
+            return self.parseName(p)
         else:
             print("Unknown tag: ", p.tag)
             return False
@@ -140,7 +141,9 @@ class WordHandler(object):
 
         # parse new action
         self.action = CommandType.getAction(p.word)
-        assert self.action != CommandType.NODEF, "Unknown infinitive verb!"
+        if self.action == CommandType.NODEF:
+            print("Unknown infinitive verb!")
+            return False
 
         # check if action is editor command
         if self.action == CommandType.REDO:
@@ -149,14 +152,22 @@ class WordHandler(object):
         if self.action == CommandType.UNDO:
             self.context.clear()
             self.context.extend(self.history.undo())
+            return True
 
     def parseWhatObject(self, p):
         if self.action == CommandType.CREATE or self.action == CommandType.DELETE:
             # parse new object
-            self.what.type = languageType.getType(p.normal_form)
-            assert self.what.type != languageType.NODEF, "Unknown WHAT object type!"
+            self.what.type = languageType.getType(self.type_part + p.normal_form)
+                
+            if self.what.type == languageType.NODEF:
+                print("Unknown WHAT object type!")
+                return False
             # change abstract class to special one
-            self.what = languageType.getClass(self.what.type, self.what.attributes)
+            if self.what.type != languageType.PART:
+                self.type_part = ""
+                self.what = languageType.getClass(self.what.type, self.what.attributes)
+            else:
+                self.type_part += p.normal_form + " "
         if self.action == CommandType.CHANGE:
             self.what.type = languageType.getType(p.normal_form)
             if self.what.type == languageType.NODEF: # we have an attribute name
@@ -167,13 +178,17 @@ class WordHandler(object):
 
             # BOOL: сделать what(метод getPotato) bool(статическим)             ВП ПРИЛ    CHANGE ATTRIBUTE
             # STR: изменить what attribute (имя) where(класса) Name на newName  ВП         CHANGE ATTRIBUTE
+        return True
 
     def parseWhereObject(self, p):
         self.where.type = languageType.getType(p.normal_form)
-        assert self.where.type != languageType.NODEF, "Unknown WHERE object type!"
+        if self.where.type == languageType.NODEF:
+            print("Unknown WHERE object type!")
+            return False
         # change abstract class to special one
         self.where = languageType.getClass(self.where.type, self.where.attributes)
         self.is_where_mode = True
+        return True
 
     def parseName(self, p):
         # Find out what object we should change
@@ -188,3 +203,5 @@ class WordHandler(object):
                 object.attributes["name"].value = p.normal_form.lower()
             else:
                 object.attributes["name"].value += p.normal_form[0].title() + p.normal_form[1:].lower()
+
+        return True

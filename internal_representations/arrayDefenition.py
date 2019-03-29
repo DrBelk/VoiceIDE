@@ -3,7 +3,7 @@ from attribute import *
 from languageType import languageType
 from helpFunctions import str2
 
-class variableDefenition(abstractObject):
+class arrayDefenition(abstractObject):
     """Represents defeniton of a variable"""
 
     def __init__(self, _attributes = {}):
@@ -22,5 +22,5 @@ class variableDefenition(abstractObject):
         str += self.attributes["type"].value if self.attributes["type"].value else "void"
         str += " "
         str += self.attributes["name"].value if self.attributes["name"].value else "unnamedVariable"
-        str += ";"
+        str += "[];"
         return str.replace("\t", " " * 4)
