@@ -11,18 +11,7 @@ class CommandType(Enum):
     REDO	= auto()
 
     def getSounds(id):
-        if id == CommandType.CREATE:
-            return ['создать', 'добавить']
-        if id == CommandType.DELETE:
-            return ['удалить', 'вырезать']
-        if id == CommandType.CHANGE:
-            return ['изменить', 'поменять', 'редактировать']
-        if id == CommandType.UNDO:
-            return ['отменить', 'назад']
-        if id == CommandType.REDO:
-            return ['вернуть']
-        if id == CommandType.NODEF:
-            return []
+        return sounds[id]
 
     def getAction(word):
         print('[getAction]+')
@@ -33,3 +22,12 @@ class CommandType(Enum):
                     return cmd
         print('[getAction] cmd did not found')
         return CommandType.NODEF
+
+sounds = {
+    CommandType.CREATE:     ['создать', 'добавить'],
+    CommandType.DELETE:     ['удалить', 'вырезать'],
+    CommandType.CHANGE:     ['изменить', 'поменять', 'редактировать', 'сделать'],
+    CommandType.UNDO:       ['отменить', 'назад'],
+    CommandType.REDO:       ['вернуть'],
+    CommandType.NODEF:      [] 
+}

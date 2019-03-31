@@ -37,6 +37,12 @@ class binaryAttribute(attribute):
         assert isinstance(_value, bool), "Value type is not bool!"
         return super().__init__(_name, _sounds, _value)
 
+class intAttribute(attribute):
+    """value type is integer"""
+    def __init__(self, _name, _sounds, _value):
+        assert isinstance(_value, int), "Value type is not int!"
+        return super().__init__(_name, _sounds, _value)
+
 class stringAttribute(attribute):
     """value type is string"""
     def __init__(self, _name, _sounds, _value):

@@ -12,5 +12,5 @@ class Focus(abstractObject):
         self.attributes = _attributes
 
     def __repr__(self):
-        str = "// We are here"
-        return str.replace("\t", " " * 4)
+        string = "// We are here"
+        return string.replace("\t", " " * 4)

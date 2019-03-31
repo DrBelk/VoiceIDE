@@ -27,6 +27,7 @@ class WordHandler(object):
         self.where = abstractObject(languageType.NODEF) # represent an place in an object where the action happens
         self.history.addContext(self.context)
         self.is_where_mode = False
+        self.isBinaryTrue = True
 
     def sendWord(self, word):
         """Processes a word from any word generator depending on the current state"""
@@ -84,6 +85,11 @@ class WordHandler(object):
             _to.append(languageType.getClass(languageType.FOCUS))
             return _to
 
+        def deleteObj(_from, del_id):
+            for object in _from:
+                if del_id == id(object):
+                    parent.remove(object)
+
         # load old command context, not just = operator to keep self.focus as pointer
         self.context.clear()
         self.context.extend(self.history.getCurrContext())
@@ -102,15 +108,22 @@ class WordHandler(object):
 
         if self.action == CommandType.CREATE:
             self.focus.append(self.what)
-        if self.action == CommandType.DELETE:
+        elif self.action == CommandType.DELETE:
             # find WHAT object in the context
             find_res = findInContext(self.context, None, self.what)
             if find_res is not None:
                 parent = getParent(self.context, id(find_res))
                 assert isinstance(parent, list), "DELETE find res is not a list"
-                for object in parent:
-                    if id(find_res) == id(object):
-                        parent.remove(object)
+                deleteObj(parent, id(find_res))
+
+        elif self.action == CommandType.CHANGE:
+            if not isinstance(self.what, str) and self.what.type != languageType.NODEF:
+                find_res = findInContext(self.context, None, self.what)
+                if find_res is not None:
+                    parent = getParent(self.context, id(find_res))
+                    assert isinstance(parent, list), "CHANGE find res is not a list"
+                    deleteObj(parent, id(find_res))
+                    parent.append(self.what)
 
         # to keep FOCUS the last in the object array
         self.focus = moveFocus(_from = self.focus,
@@ -118,7 +131,7 @@ class WordHandler(object):
 
     def try_apply(self, p):
         # very specific situation
-        if self.what.type == languageType.PART:
+        if not isinstance(self.what, str) and self.what.type == languageType.PART:
             return self.parseWhatObject(p)
         if "INFN" in p.tag:
             return self.parseAction(p)
@@ -126,6 +139,10 @@ class WordHandler(object):
             return self.parseWhatObject(p)
         elif {"NOUN", "gent"} in p.tag:
             return self.parseWhereObject(p)
+        elif {"PRCL"} in p.tag:
+            return self.parseNot(p)
+        elif {"ADJF", "ablt"} in p.tag:
+            return self.parseWhatBinary(p)
         elif "VERB" in p.tag:
             pass # can be part of "наследуется от"
         elif "LATN" in p.tag:
@@ -134,6 +151,14 @@ class WordHandler(object):
             print("Unknown tag: ", p.tag)
             return False
         return True
+
+    def parseWhatBoolean(self, p):
+        if p.word == "не":
+            self.isBinaryTrue = False
+        return True
+
+    def parseWhatBinary(self, p):
+        return self.what.setBinary(p.normal_form, self.isBinaryTrue)
 
     def parseAction(self, p):
         if self.action != CommandType.UNDO and self.action != CommandType.REDO:
@@ -170,12 +195,11 @@ class WordHandler(object):
                 self.type_part += p.normal_form + " "
         if self.action == CommandType.CHANGE:
             self.what.type = languageType.getType(p.normal_form)
+            self.what = languageType.getClass(self.what.type, self.what.attributes)
             if self.what.type == languageType.NODEF: # we have an attribute name
                 self.what = p.normal_form
             
             # configure WHERE object
-            # MULTI: изменить what(родителей (ВП), тело(ВП))  where(класса potato)             ВП         MOVE FOCUS
-
             # BOOL: сделать what(метод getPotato) bool(статическим)             ВП ПРИЛ    CHANGE ATTRIBUTE
             # STR: изменить what attribute (имя) where(класса) Name на newName  ВП         CHANGE ATTRIBUTE
         return True

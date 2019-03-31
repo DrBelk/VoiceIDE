@@ -11,30 +11,35 @@ class Method(abstractObject):
 
         self.attributes = _attributes
         
-        name = stringAttribute("name", ["имя", "название"], "")
-        self.attributes[name.name] = name
+        name = "name"
+        self.attributes[name] = stringAttribute(name, ["имя", "название"], "")
 
-        of_class = stringAttribute("ofClass", ["класса"], "")
-        self.attributes[of_class.name] = of_class
+        name = "ofClass"
+        self.attributes[name] = stringAttribute(name, ["имя", "название"], "")
         
-        ret_type = stringAttribute("retType", "возвращает", "")
-        self.attributes[ret_type.name] = ret_type
+        name = "retType"
+        self.attributes[name] = stringAttribute(name, ["возвращает"], "")
 
-        parameters = multiAttribute("params", ["принимает", "параметры"], [])
-        self.attributes[parameters.name] = parameters
+        name = "params"
+        self.attributes[name] = multiAttribute(name, ["принимает", "параметры"], [])
 
-        body = multiAttribute("body", ["тело", "реализация"], [])
-        self.attributes[body.name] = body
+        name = "body"
+        self.attributes[name] =  multiAttribute(name, ["тело", "реализация"], [])
+
+        name = "isStatic"
+        self.attributes[name] =  binaryAttribute(name, ["статический"], False)
 
     def __repr__(self):
-        str =  self.attributes["retType"].value if self.attributes["retType"].value else "void" + " "
-        str += self.attributes["ofClass"].value if self.attributes["ofClass"].value + "::" else ""
-        str += self.attributes["name"].value if self.attributes["name"].value else "unnamedMethod"
-        str += "("
+        string =  "static " if self.attributes["isStatic"].value else ""
+        string += self.attributes["retType"].value if self.attributes["retType"].value else "void"
+        string += " "
+        string += self.attributes["ofClass"].value if self.attributes["ofClass"].value + "::" else ""
+        string += self.attributes["name"].value if self.attributes["name"].value else "unnamedMethod"
+        string += "("
         for param in self.attributes["params"].value:
-            str += str2(param) + ", "
-        str += ") {\n"
+            string += str2(param) + ", "
+        string += ") {\n"
         for body_element in self.attributes["body"].value:
-            str += "\t" + str2(body_element).replace("\n", "\n\t") + "\n"
-        str += "}"
-        return str.replace("\t", " " * 4)
+            string += "\t" + str2(body_element).replace("\n", "\n\t") + "\n"
+        string += "}"
+        return string.replace("\t", " " * 4)

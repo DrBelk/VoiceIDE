@@ -18,9 +18,9 @@ class variableDefenition(abstractObject):
         self.attributes[name] = stringAttribute(name, ["тип"], "")
 
     def __repr__(self):
-        str = ""
-        str += self.attributes["type"].value if self.attributes["type"].value else "void"
-        str += " "
-        str += self.attributes["name"].value if self.attributes["name"].value else "unnamedVariable"
-        str += ";"
-        return str.replace("\t", " " * 4)
+        string = ""
+        string += self.attributes["type"].value if self.attributes["type"].value else "void"
+        string += " "
+        string += self.attributes["name"].value if self.attributes["name"].value else "unnamedVariable"
+        string += ";"
+        return string.replace("\t", " " * 4)

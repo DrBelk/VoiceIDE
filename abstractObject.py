@@ -13,6 +13,13 @@ class abstractObject(object):
     def __str__(self):
         return self.__repr__()
 
+    def setBinary(self, attribute_sound, isTrue):
+        for attr in self.attributes.values():
+            if attr.isWordThisAttribute(attribute_sound):
+                attr.value = isTrue
+                return True
+        return False
+
     def searchObject(self, attribute_sound, object):
         if attribute_sound is None:
             # link to an object is reqired

@@ -27,6 +27,7 @@
     <Compile Include="attribute.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="internal_representations\Number.py" />
     <Compile Include="internal_representations\Class.py">
       <SubType>Code</SubType>
     </Compile>

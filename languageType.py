@@ -36,13 +36,14 @@ class languageType(Enum):
         return sounds[id]
 
     def getClass(id, attributes = {}):
+        from abstractObject import abstractObject
         from Class import Class
         from Method import Method
         from Focus import Focus
         from variableDefenition import variableDefenition
         from arrayDefenition import arrayDefenition
         class_type = {
-            languageType.NODEF:         None,
+            languageType.NODEF:         abstractObject(languageType.NODEF),
             languageType.CODE:          None,
             languageType.PART:          None,
             languageType.FOCUS:         Focus(attributes),

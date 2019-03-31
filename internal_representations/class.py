@@ -21,10 +21,10 @@ class Class(abstractObject):
         self.attributes[body.name] = body
 
     def __repr__(self):
-        str = "class "
-        str += self.attributes["name"].value if self.attributes["name"].value else "unnamedClass" 
-        str += " {\n"
+        string = "class "
+        string += self.attributes["name"].value if self.attributes["name"].value else "unnamedClass" 
+        string += " {\n"
         for body_element in self.attributes["body"].value: 
-            str += "\t" + str2(body_element).replace("\n", "\n\t") + "\n"
-        str += "}"
-        return str.replace("\t", " " * 4)
+            string += "\t" + str2(body_element).replace("\n", "\n\t") + "\n"
+        string += "}"
+        return string.replace("\t", " " * 4)
