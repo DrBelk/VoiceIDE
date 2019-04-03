@@ -21,6 +21,7 @@
   <ItemGroup>
     <Content Include="ideas.txt" />
     <Content Include="tests\1\input.txt" />
+    <Content Include="VoiceIDE-45661bc8c02b.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="abstractObject.py" />

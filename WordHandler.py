@@ -28,6 +28,7 @@ class WordHandler(object):
         self.history.addContext(self.context)
         self.is_where_mode = False
         self.isBinaryTrue = True
+        #self.nextIsNewValue = False
 
     def sendWord(self, word):
         """Processes a word from any word generator depending on the current state"""
@@ -68,7 +69,6 @@ class WordHandler(object):
             for object in context:
                 res = object.getParent(child_id)    
                 if res is not None: return res
-            # if res is None parent is context
             return context
 
         def getFocusParent(context):
@@ -125,14 +125,19 @@ class WordHandler(object):
                     deleteObj(parent, id(find_res))
                     parent.append(self.what)
 
-        # to keep FOCUS the last in the object array
+        # to keep FOCUS be the last in the object array
         self.focus = moveFocus(_from = self.focus,
                                 _to = self.focus)
 
     def try_apply(self, p):
-        # very specific situation
+        # processing situations when we expect some specific word chain
         if not isinstance(self.what, str) and self.what.type == languageType.PART:
             return self.parseWhatObject(p)
+
+        #if self.nextIsNewValue:
+        #    return self.setAttributeValue(p)
+
+        # common situations
         if "INFN" in p.tag:
             return self.parseAction(p)
         elif {"NOUN", "accs"} in p.tag:
@@ -141,18 +146,30 @@ class WordHandler(object):
             return self.parseWhereObject(p)
         elif {"PRCL"} in p.tag:
             return self.parseNot(p)
+        elif {"PREP"} in p.tag:
+            return self.parsePrep(p)
         elif {"ADJF", "ablt"} in p.tag:
             return self.parseWhatBinary(p)
-        elif "VERB" in p.tag:
+        elif {"VERB"} in p.tag:
             pass # can be part of "наследуется от"
-        elif "LATN" in p.tag:
+        elif {"LATN"} in p.tag:
             return self.parseName(p)
         else:
             print("Unknown tag: ", p.tag)
             return False
         return True
 
-    def parseWhatBoolean(self, p):
+    #def setAttributeValue(self, p):
+    #    pass
+
+    def parsePrep(self, p):
+        # find att
+        if p.word == "на" and self.action == CommandType.CHANGE:
+        #    self.nextIsNewValue = True
+            self.is_where_mode = False
+        return True
+
+    def parseNot(self, p):
         if p.word == "не":
             self.isBinaryTrue = False
         return True
@@ -200,8 +217,7 @@ class WordHandler(object):
                 self.what = p.normal_form
             
             # configure WHERE object
-            # BOOL: сделать what(метод getPotato) bool(статическим)             ВП ПРИЛ    CHANGE ATTRIBUTE
-            # STR: изменить what attribute (имя) where(класса) Name на newName  ВП         CHANGE ATTRIBUTE
+            # STR: изменить (what attribute (имя)) where(класса) Name на newName ВП         CHANGE ATTRIBUTE
         return True
 
     def parseWhereObject(self, p):
