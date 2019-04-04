@@ -7,7 +7,7 @@ class arrayDefenition(abstractObject):
     """Represents defeniton of a variable"""
 
     def __init__(self, _attributes = {}):
-        super().__init__(languageType.CLASS)
+        super().__init__(languageType.ARRAY_DEF)
 
         self.attributes = _attributes
         

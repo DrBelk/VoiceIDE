@@ -1,4 +1,7 @@
 import pymorphy2
+from word2number import w2n
+from google.cloud import translate
+
 from abstractObject import *
 from attribute import *
 from CommandType import CommandType
@@ -13,7 +16,9 @@ class WordHandler(object):
         self.morph = pymorphy2.MorphAnalyzer()  # we do not need to clear parser for every command
         self.history = ContextHistory()         # we do not need to clear history for every command
         self.action = CommandType.NODEF         # just init value
-        self.type_part = ""
+        self.what_type_part = ""
+        self.where_type_part = ""
+        self.translate_client = translate.Client()
 
         # init context object (consists an array of all the code objects) and focus
         self.context = [languageType.getClass(languageType.FOCUS)]
@@ -165,7 +170,15 @@ class WordHandler(object):
     def setAttributeValue(self, p):
         # if the attribute is found
         def parseInteger(p):
-            pass
+            translate_res = self.translate_client.translate(
+                                p.word,
+                                source_language = 'ru',
+                                target_language = 'en'
+                                )['translatedText']
+            if not self.editing_attribute_new_value:
+                self.editing_attribute_new_value = w2n.word_to_num(translate_res)
+            else:
+                self.editing_attribute_new_value += w2n.word_to_num(translate_res)
         def parseString(p):
             if {"LATN"} in p.tag:
                 if not self.editing_attribute_new_value:
@@ -217,37 +230,39 @@ class WordHandler(object):
             return True
 
     def parseWhatObject(self, p):
-        if self.action == CommandType.CREATE or self.action == CommandType.DELETE:
-            # parse new object
-            self.what.type = languageType.getType(self.type_part + p.normal_form)
+        def getTypePart():
+            self.what.type = languageType.getType(self.what_type_part + p.normal_form)
                 
             if self.what.type == languageType.NODEF:
                 print("Unknown WHAT object type!")
                 return False
             # change abstract class to special one
             if self.what.type != languageType.PART:
-                self.type_part = ""
+                self.what_type_part = ""
                 self.what = languageType.getClass(self.what.type, self.what.attributes)
             else:
-                self.type_part += p.normal_form + " "
+                self.what_type_part += p.normal_form + " "
+        if self.action == CommandType.CREATE or self.action == CommandType.DELETE:
+            # parse new object
+            getTypePart()
         if self.action == CommandType.CHANGE:
-            self.what.type = languageType.getType(p.normal_form)
-            self.what = languageType.getClass(self.what.type, self.what.attributes)
+            getTypePart()
             if self.what.type == languageType.NODEF: # we have an attribute name
                 self.what = p.normal_form
-            
-            # configure WHERE object
-            # STR: изменить (what attribute (имя)) where(класса) Name на newName ВП         CHANGE ATTRIBUTE
         return True
 
     def parseWhereObject(self, p):
-        self.where.type = languageType.getType(p.normal_form)
+        self.where.type = languageType.getType(self.where_type_part + p.normal_form)
         if self.where.type == languageType.NODEF:
             print("Unknown WHERE object type!")
             return False
         # change abstract class to special one
-        self.where = languageType.getClass(self.where.type, self.where.attributes)
-        self.is_where_mode = True
+        if self.where.type != languageType.PART:
+            self.where_type_part = ""
+            self.where = languageType.getClass(self.where.type, self.where.attributes)
+            self.is_where_mode = True
+        else:
+            self.where_type_part += p.normal_form + " "
         return True
 
     def parseName(self, p):

@@ -1,6 +1,7 @@
 MAIN_PROJECT_PATH = 'C:/Users/Belk/Desktop/VoiceIDE2/'
 
-PRE_TEXT = 'добавить метод test method изменить имя метода test method на changed method '
+PRE_TEXT = 'добавить определение массива test array изменить размер определения массива test array на семдесят семь '
+#PRE_TEXT = 'добавить метод test method изменить имя метода test method на changed method добавить метод test method редактировать тело метода test method'
 
 #PRE_TEXT = 'добавить метод test method редактировать тело метода test method редактировать контекст '
 #PRE_TEXT = 'добавить метод test method сделать метод test method статическим '

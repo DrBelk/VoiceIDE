@@ -30,7 +30,7 @@ class Method(abstractObject):
         string =  "static " if self.attributes["isStatic"].value else ""
         string += self.attributes["retType"].value if self.attributes["retType"].value else "void"
         string += " "
-        string += self.attributes["ofClass"].value if self.attributes["ofClass"].value + "::" else ""
+        #string += self.attributes["ofClass"].value if self.attributes["ofClass"].value + "::" else ""
         string += self.attributes["name"].value if self.attributes["name"].value else "unnamedMethod"
         string += "("
         for param in self.attributes["params"].value:
