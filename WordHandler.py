@@ -105,6 +105,10 @@ class WordHandler(object):
             if find_res is not None:
                 self.focus = moveFocus(_from = self.focus,
                                        _to = find_res)
+        elif isinstance(self.what, str) and \
+             (self.what == "контекст" or self.what == "корень"):
+                self.focus = moveFocus(_from = self.focus,
+                                       _to = self.context)
 
         if self.action == CommandType.CREATE:
             self.focus.append(self.what)
@@ -115,7 +119,6 @@ class WordHandler(object):
                 parent = getParent(self.context, id(find_res))
                 assert isinstance(parent, list), "DELETE find res is not a list"
                 deleteObj(parent, id(find_res))
-
         elif self.action == CommandType.CHANGE:
             if not isinstance(self.what, str) and self.what.type != languageType.NODEF:
                 find_res = findInContext(self.context, None, self.what)
