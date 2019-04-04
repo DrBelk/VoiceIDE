@@ -22,9 +22,6 @@ class attribute(object):
     def searchObject(self, attribute_name, object):
         return None
 
-    def getAttrIdAndSound(self, id):
-        return None
-
     def getParent(self, id):
         return None
 
@@ -58,12 +55,6 @@ class multiAttribute(attribute):
     def searchObject(self, attribute_name, object):
         for value_object in self.value:
             res = value_object.searchObject(attribute_name, object)
-            if res is not None: return res
-        return None
-
-    def getAttrIdAndSound(self, id):
-        for object in self.value:
-            res = object.getAttrIdAndSound(id)
             if res is not None: return res
         return None
 

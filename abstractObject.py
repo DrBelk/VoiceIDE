@@ -48,16 +48,6 @@ class abstractObject(object):
             if res is not None: return res
         return None
 
-    def getAttrIdAndSound(self, searched_id):
-        # check if any attr has provided id
-        for attr in self.attributes.values():
-            if searched_id == id(attr.value):
-                return (self, attr.sounds[0])
-        for attr in self.attributes.values():
-            res = attr.getAttrIdAndSound(searched_id)
-            if res is not None: return res
-        return None
-
     def getParent(self, child_id):
         for attr in self.attributes.values():
             res = attr.getParent(child_id)

@@ -59,12 +59,6 @@ class WordHandler(object):
                 if res is not None: return res
             return None
 
-        def getWhereAndName(context, searched_id):
-            for object in context:
-                res = object.getAttrIdAndSound(searched_id)
-                if res is not None: return res
-            return None
-
         def getParent(context, child_id):
             for object in context:
                 res = object.getParent(child_id)    
@@ -105,10 +99,9 @@ class WordHandler(object):
             if find_res is not None:
                 self.focus = moveFocus(_from = self.focus,
                                        _to = find_res)
-        elif isinstance(self.what, str) and \
-             (self.what == "контекст" or self.what == "корень"):
-                self.focus = moveFocus(_from = self.focus,
-                                       _to = self.context)
+        elif isinstance(self.what, str) and self.what in ["контекст", "корень"]:
+            self.focus = moveFocus(_from = self.focus,
+                                   _to = self.context)
 
         if self.action == CommandType.CREATE:
             self.focus.append(self.what)
@@ -143,6 +136,8 @@ class WordHandler(object):
         # common situations
         if "INFN" in p.tag:
             return self.parseAction(p)
+        #elif self.nextIsNewValue: # should be before any other but verb
+        #    return self.setAttributeValue(p)
         elif {"NOUN", "accs"} in p.tag:
             return self.parseWhatObject(p)
         elif {"NOUN", "gent"} in p.tag:
@@ -153,8 +148,6 @@ class WordHandler(object):
             return self.parsePrep(p)
         elif {"ADJF", "ablt"} in p.tag:
             return self.parseWhatBinary(p)
-        elif {"VERB"} in p.tag:
-            pass # can be part of "наследуется от"
         elif {"LATN"} in p.tag:
             return self.parseName(p)
         else:
@@ -162,8 +155,13 @@ class WordHandler(object):
             return False
         return True
 
-    #def setAttributeValue(self, p):
-    #    pass
+    def setAttributeValue(self, p):
+        # find the attribute
+
+        # get attribute type
+        # string to value
+        # set the value
+        pass
 
     def parsePrep(self, p):
         # find att
