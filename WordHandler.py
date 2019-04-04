@@ -28,6 +28,10 @@ class WordHandler(object):
         self.history.addContext(self.context)
         self.is_where_mode = False
         self.isBinaryTrue = True
+
+        self.editing_attribute_type = None
+        self.nextIsNewValue = False
+        self.editing_attribute_new_value = None
         #self.nextIsNewValue = False
 
     def sendWord(self, word):
@@ -96,9 +100,15 @@ class WordHandler(object):
             assert isinstance(self.what, str), "WHAT object is not a string"
             # we expect attribute name in WHAT object
             find_res = findInContext(self.context, self.what, self.where)
-            if find_res is not None:
+            if isinstance(find_res, multiAttribute):
                 self.focus = moveFocus(_from = self.focus,
-                                       _to = find_res)
+                                       _to = find_res.value)
+            elif find_res is not None:
+                if self.editing_attribute_new_value:
+                    find_res.value = self.editing_attribute_new_value
+                else:
+                    self.editing_attribute_type = type(find_res.value)
+
         elif isinstance(self.what, str) and self.what in ["контекст", "корень"]:
             self.focus = moveFocus(_from = self.focus,
                                    _to = self.context)
@@ -130,14 +140,11 @@ class WordHandler(object):
         if not isinstance(self.what, str) and self.what.type == languageType.PART:
             return self.parseWhatObject(p)
 
-        #if self.nextIsNewValue:
-        #    return self.setAttributeValue(p)
-
         # common situations
         if "INFN" in p.tag:
             return self.parseAction(p)
-        #elif self.nextIsNewValue: # should be before any other but verb
-        #    return self.setAttributeValue(p)
+        elif self.nextIsNewValue: # should be before any other but verb
+            return self.setAttributeValue(p)
         elif {"NOUN", "accs"} in p.tag:
             return self.parseWhatObject(p)
         elif {"NOUN", "gent"} in p.tag:
@@ -156,17 +163,29 @@ class WordHandler(object):
         return True
 
     def setAttributeValue(self, p):
-        # find the attribute
+        # if the attribute is found
+        def parseInteger(p):
+            pass
+        def parseString(p):
+            if {"LATN"} in p.tag:
+                if not self.editing_attribute_new_value:
+                    self.editing_attribute_new_value = p.normal_form.lower()
+                else:
+                    self.editing_attribute_new_value += p.normal_form[0].title() + p.normal_form[1:].lower()
+            else:
+                self.editing_attribute_new_value = p.normal_form.lower()
 
-        # get attribute type
-        # string to value
-        # set the value
-        pass
+        if self.editing_attribute_type:
+            if self.editing_attribute_type is int:
+                parseInteger(p)
+            elif self.editing_attribute_type is str:
+                parseString(p)
+        return True
 
     def parsePrep(self, p):
         # find att
         if p.word == "на" and self.action == CommandType.CHANGE:
-        #    self.nextIsNewValue = True
+            self.nextIsNewValue = True
             self.is_where_mode = False
         return True
 
@@ -244,5 +263,4 @@ class WordHandler(object):
                 object.attributes["name"].value = p.normal_form.lower()
             else:
                 object.attributes["name"].value += p.normal_form[0].title() + p.normal_form[1:].lower()
-
         return True

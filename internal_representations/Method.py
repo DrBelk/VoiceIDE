@@ -13,12 +13,9 @@ class Method(abstractObject):
         
         name = "name"
         self.attributes[name] = stringAttribute(name, ["имя", "название"], "")
-
-        name = "ofClass"
-        self.attributes[name] = stringAttribute(name, ["имя", "название"], "")
         
         name = "retType"
-        self.attributes[name] = stringAttribute(name, ["возвращает"], "")
+        self.attributes[name] = stringAttribute(name, ["возврт"], "")
 
         name = "params"
         self.attributes[name] = multiAttribute(name, ["принимает", "параметры"], [])

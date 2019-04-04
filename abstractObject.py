@@ -36,7 +36,7 @@ class abstractObject(object):
                 for attr in self.attributes.values():
                     if attr.isWordThisAttribute(attribute_sound):
                         does_given_sound_represent_attribute = True
-                        searched_attr = attr.value
+                        searched_attr = attr
                         break
                 if does_given_sound_represent_attribute:
                     #check if the name of the object is the same
