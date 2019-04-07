@@ -3,7 +3,7 @@ from attribute import *
 from languageType import languageType
 from helpFunctions import str2
 
-class Focus(abstractObject):
+class _focus(abstractObject):
     """Represents cursor in the code"""
 
     def __init__(self, _attributes = {}):

@@ -3,7 +3,7 @@ from attribute import *
 from languageType import languageType
 from helpFunctions import str2
 
-class Class(abstractObject):
+class _class(abstractObject):
     """Represents C++ class"""
 
     def __init__(self, _attributes = {}):

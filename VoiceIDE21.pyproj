@@ -28,8 +28,9 @@
     <Compile Include="attribute.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="internal_representations\Number.py" />
-    <Compile Include="internal_representations\Class.py">
+    <Compile Include="internal_representations\_return.py" />
+    <Compile Include="internal_representations\_number.py" />
+    <Compile Include="internal_representations\_class.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CommandType.py">
@@ -40,10 +41,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="helpFunctions.py" />
-    <Compile Include="internal_representations\Focus.py" />
-    <Compile Include="internal_representations\Method.py" />
-    <Compile Include="internal_representations\arrayDefenition.py" />
-    <Compile Include="internal_representations\variableDefenition.py">
+    <Compile Include="internal_representations\_focus.py" />
+    <Compile Include="internal_representations\_method.py" />
+    <Compile Include="internal_representations\_arrayDefenition.py" />
+    <Compile Include="internal_representations\_variableDefenition.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="languageType.py">

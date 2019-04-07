@@ -3,7 +3,7 @@ from attribute import *
 from languageType import languageType
 from helpFunctions import str2
 
-class Number(abstractObject):
+class _number(abstractObject):
     """Represents defeniton of a variable"""
 
     def __init__(self, _attributes = {}):

@@ -20,10 +20,12 @@ class languageType(Enum):
 
     def getSounds(id):
         sounds = {
+            # should be empty
             languageType.NODEF:         [],
             languageType.CODE:          [],
             languageType.PART:          [],
             languageType.FOCUS:         [],
+            # fill that for all the objects below
             languageType.CLASS:         ['класс', 'объект'],
             languageType.METHOD:        ['метод', 'функция'],
             languageType.VARIABLE:      ['переменная'],
@@ -37,21 +39,21 @@ class languageType(Enum):
 
     def getClass(id, attributes = {}):
         from abstractObject import abstractObject
-        from Class import Class
-        from Method import Method
-        from Focus import Focus
-        from variableDefenition import variableDefenition
-        from arrayDefenition import arrayDefenition
+        from _class import _class
+        from _method import _method
+        from _focus import _focus
+        from _variableDefenition import _variableDefenition
+        from _arrayDefenition import _arrayDefenition
         class_type = {
             languageType.NODEF:         abstractObject(languageType.NODEF),
             languageType.CODE:          None,
             languageType.PART:          None,
-            languageType.FOCUS:         Focus(attributes),
-            languageType.CLASS:         Class(attributes),
-            languageType.METHOD:        Method(attributes),
+            languageType.FOCUS:         _focus(attributes),
+            languageType.CLASS:         _class(attributes),
+            languageType.METHOD:        _method(attributes),
             languageType.VARIABLE:      None,
-            languageType.VARIABLE_DEF:  variableDefenition(attributes),
-            languageType.ARRAY_DEF:     arrayDefenition(attributes),
+            languageType.VARIABLE_DEF:  _variableDefenition(attributes),
+            languageType.ARRAY_DEF:     _arrayDefenition(attributes),
             languageType.CYCLE:         None,
             languageType.CONDITION:     None,
             languageType.PARAMETER:     None

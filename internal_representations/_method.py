@@ -3,7 +3,7 @@ from attribute import *
 from languageType import languageType
 from helpFunctions import str2
 
-class Method(abstractObject):
+class _method(abstractObject):
     """Represents C++ method"""
 
     def __init__(self, _attributes = {}):

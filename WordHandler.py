@@ -37,7 +37,7 @@ class WordHandler(object):
         self.editing_attribute_type = None
         self.nextIsNewValue = False
         self.editing_attribute_new_value = None
-        #self.nextIsNewValue = False
+        self.current_number_string = ""
 
     def sendWord(self, word):
         """Processes a word from any word generator depending on the current state"""
@@ -168,17 +168,14 @@ class WordHandler(object):
         return True
 
     def setAttributeValue(self, p):
-        # if the attribute is found
         def parseInteger(p):
+            self.current_number_string += p.word + " "
             translate_res = self.translate_client.translate(
-                                p.word,
+                                self.current_number_string,
                                 source_language = 'ru',
                                 target_language = 'en'
                                 )['translatedText']
-            if not self.editing_attribute_new_value:
-                self.editing_attribute_new_value = w2n.word_to_num(translate_res)
-            else:
-                self.editing_attribute_new_value += w2n.word_to_num(translate_res)
+            self.editing_attribute_new_value = w2n.word_to_num(translate_res)
         def parseString(p):
             if {"LATN"} in p.tag:
                 if not self.editing_attribute_new_value:
@@ -188,6 +185,7 @@ class WordHandler(object):
             else:
                 self.editing_attribute_new_value = p.normal_form.lower()
 
+        # if the attribute is found
         if self.editing_attribute_type:
             if self.editing_attribute_type is int:
                 parseInteger(p)
@@ -196,6 +194,13 @@ class WordHandler(object):
         return True
 
     def parsePrep(self, p):
+        # find att
+        if p.word == "на" and self.action == CommandType.CHANGE:
+            self.nextIsNewValue = True
+            self.is_where_mode = False
+        return True
+
+    def parseNumbr(self, p):
         # find att
         if p.word == "на" and self.action == CommandType.CHANGE:
             self.nextIsNewValue = True
