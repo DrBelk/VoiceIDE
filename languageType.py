@@ -11,6 +11,7 @@ class languageType(Enum):
     FOCUS           = auto()
     CLASS           = auto()
     METHOD          = auto()
+    RETURN          = auto()
     VARIABLE        = auto()
     VARIABLE_DEF    = auto()
     ARRAY_DEF       = auto()
@@ -28,6 +29,7 @@ class languageType(Enum):
             # fill that for all the objects below
             languageType.CLASS:         ['класс', 'объект'],
             languageType.METHOD:        ['метод', 'функция'],
+            languageType.RETURN:        ['возврат'],
             languageType.VARIABLE:      ['переменная'],
             languageType.VARIABLE_DEF:  ['определение переменной'],
             languageType.ARRAY_DEF:     ['определение массива'],
@@ -41,6 +43,7 @@ class languageType(Enum):
         from abstractObject import abstractObject
         from _class import _class
         from _method import _method
+        from _return import _return
         from _focus import _focus
         from _variableDefenition import _variableDefenition
         from _arrayDefenition import _arrayDefenition
@@ -51,6 +54,7 @@ class languageType(Enum):
             languageType.FOCUS:         _focus(attributes),
             languageType.CLASS:         _class(attributes),
             languageType.METHOD:        _method(attributes),
+            languageType.RETURN:        _return(attributes),
             languageType.VARIABLE:      None,
             languageType.VARIABLE_DEF:  _variableDefenition(attributes),
             languageType.ARRAY_DEF:     _arrayDefenition(attributes),

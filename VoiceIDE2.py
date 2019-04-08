@@ -54,7 +54,7 @@ class VoiceIDE(App):
             instance.text = ""
 
     def switchMic(self, instance):
-        if instance.text == "Включить микрофон":
+        if not self.listen:
             instance.text = "Выключить микрофон"
             self.listen = True
         else:
@@ -65,7 +65,7 @@ class VoiceIDE(App):
     def soundHandle(self):
         l = soundHandler.Listener()
         while (True):
-            while(self.listen):
+            while self.listen:
                 word_cmd_list = l.listen()
                 word_cmd_list = word_cmd_list.lower().split()
                 for word in word_cmd_list:
@@ -74,8 +74,3 @@ class VoiceIDE(App):
 
 if __name__ == '__main__':
     VoiceIDE().run()
-
-
-
-
-

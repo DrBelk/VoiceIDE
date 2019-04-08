@@ -1,6 +1,4 @@
 import pymorphy2
-from word2number import w2n
-from google.cloud import translate
 
 from abstractObject import *
 from attribute import *
@@ -16,9 +14,6 @@ class WordHandler(object):
         self.morph = pymorphy2.MorphAnalyzer()  # we do not need to clear parser for every command
         self.history = ContextHistory()         # we do not need to clear history for every command
         self.action = CommandType.NODEF         # just init value
-        self.what_type_part = ""
-        self.where_type_part = ""
-        self.translate_client = translate.Client()
 
         # init context object (consists an array of all the code objects) and focus
         self.context = [languageType.getClass(languageType.FOCUS)]
@@ -33,11 +28,12 @@ class WordHandler(object):
         self.history.addContext(self.context)
         self.is_where_mode = False
         self.isBinaryTrue = True
+        self.what_type_part = ''
+        self.where_type_part = ''
 
         self.editing_attribute_type = None
         self.nextIsNewValue = False
         self.editing_attribute_new_value = None
-        self.current_number_string = ""
 
     def sendWord(self, word):
         """Processes a word from any word generator depending on the current state"""
@@ -141,15 +137,12 @@ class WordHandler(object):
                                 _to = self.focus)
 
     def try_apply(self, p):
-        # processing situations when we expect some specific word chain
-        if not isinstance(self.what, str) and self.what.type == languageType.PART:
-            return self.parseWhatObject(p)
-
-        # common situations
         if "INFN" in p.tag:
             return self.parseAction(p)
         elif self.nextIsNewValue: # should be before any other but verb
             return self.setAttributeValue(p)
+        elif not isinstance(self.what, str) and self.what.type == languageType.PART:
+            return self.parseWhatObject(p)
         elif {"NOUN", "accs"} in p.tag:
             return self.parseWhatObject(p)
         elif {"NOUN", "gent"} in p.tag:
@@ -169,13 +162,7 @@ class WordHandler(object):
 
     def setAttributeValue(self, p):
         def parseInteger(p):
-            self.current_number_string += p.word + " "
-            translate_res = self.translate_client.translate(
-                                self.current_number_string,
-                                source_language = 'ru',
-                                target_language = 'en'
-                                )['translatedText']
-            self.editing_attribute_new_value = w2n.word_to_num(translate_res)
+            self.editing_attribute_new_value = int(p.word)
         def parseString(p):
             if {"LATN"} in p.tag:
                 if not self.editing_attribute_new_value:
