@@ -9,16 +9,16 @@ class _method(abstractObject):
     def __init__(self, _attributes = {}):
         super().__init__(languageType.METHOD)
 
-        self.attributes = _attributes
+        self.attributes.update(_attributes)
         
         name = "name"
         self.attributes[name] = stringAttribute(name, ["имя", "название"], "")
         
         name = "retType"
-        self.attributes[name] = stringAttribute(name, ["возврт"], "")
+        self.attributes[name] = stringAttribute(name, ["возврат"], "")
 
         name = "params"
-        self.attributes[name] = multiAttribute(name, ["принимает", "параметры"], [])
+        self.attributes[name] = multiAttribute(name, ["параметр"], [])
 
         name = "body"
         self.attributes[name] =  multiAttribute(name, ["тело", "реализация"], [])
@@ -30,7 +30,6 @@ class _method(abstractObject):
         string =  "static " if self.attributes["isStatic"].value else ""
         string += self.attributes["retType"].value if self.attributes["retType"].value else "void"
         string += " "
-        #string += self.attributes["ofClass"].value if self.attributes["ofClass"].value + "::" else ""
         string += self.attributes["name"].value if self.attributes["name"].value else "unnamedMethod"
         string += "("
         for param in self.attributes["params"].value:
@@ -39,4 +38,4 @@ class _method(abstractObject):
         for body_element in self.attributes["body"].value:
             string += "\t" + str2(body_element).replace("\n", "\n\t") + "\n"
         string += "}"
-        return string.replace("\t", " " * 4)
+        return self.reprCommon(string)

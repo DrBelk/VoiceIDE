@@ -9,7 +9,7 @@ class _class(abstractObject):
     def __init__(self, _attributes = {}):
         super().__init__(languageType.CLASS)
 
-        self.attributes = _attributes
+        self.attributes.update(_attributes)
         
         name = stringAttribute("name", ["имя", "название"], "")
         self.attributes[name.name] = name
@@ -27,4 +27,4 @@ class _class(abstractObject):
         for body_element in self.attributes["body"].value: 
             string += "\t" + str2(body_element).replace("\n", "\n\t") + "\n"
         string += "}"
-        return string.replace("\t", " " * 4)
+        return self.reprCommon(string)

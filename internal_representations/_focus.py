@@ -9,8 +9,12 @@ class _focus(abstractObject):
     def __init__(self, _attributes = {}):
         super().__init__(languageType.FOCUS)
 
-        self.attributes = _attributes
+        self.attributes.update(_attributes)
+
+        # add fake name to avoid printing id for focus object
+        name = "name"
+        self.attributes[name] = stringAttribute(name, ["имя", "название"], "")
 
     def __repr__(self):
         string = "// We are here"
-        return string.replace("\t", " " * 4)
+        return self.reprCommon(string)

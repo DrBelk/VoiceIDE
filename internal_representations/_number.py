@@ -9,7 +9,7 @@ class _number(abstractObject):
     def __init__(self, _attributes = {}):
         super().__init__(languageType.CLASS)
 
-        self.attributes = _attributes
+        self.attributes.update(_attributes)
         
         #name = "name"
         #self.attributes[name] = stringAttribute(name, ["имя", "название"], "")
@@ -22,4 +22,4 @@ class _number(abstractObject):
         #str += "["
         #str += self.attributes["size"].value if self.attributes["type"].value else 10;
         #str += "];"
-        return string.replace("\t", " " * 4)
+        return self.reprCommon(string)

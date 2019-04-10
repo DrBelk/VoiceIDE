@@ -48,21 +48,18 @@ class languageType(Enum):
         from _variableDefenition import _variableDefenition
         from _arrayDefenition import _arrayDefenition
         class_type = {
-            languageType.NODEF:         abstractObject(languageType.NODEF),
-            languageType.CODE:          None,
-            languageType.PART:          None,
-            languageType.FOCUS:         _focus(attributes),
-            languageType.CLASS:         _class(attributes),
-            languageType.METHOD:        _method(attributes),
-            languageType.RETURN:        _return(attributes),
+            languageType.FOCUS:         _focus,
+            languageType.CLASS:         _class,
+            languageType.METHOD:        _method,
+            languageType.RETURN:        _return,
             languageType.VARIABLE:      None,
-            languageType.VARIABLE_DEF:  _variableDefenition(attributes),
-            languageType.ARRAY_DEF:     _arrayDefenition(attributes),
+            languageType.VARIABLE_DEF:  _variableDefenition,
+            languageType.ARRAY_DEF:     _arrayDefenition,
             languageType.CYCLE:         None,
             languageType.CONDITION:     None,
             languageType.PARAMETER:     None
                      }      
-        return class_type[id]
+        return class_type[id](attributes)
 
     def getType(word):
         print('[getType]+')

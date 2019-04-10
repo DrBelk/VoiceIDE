@@ -28,6 +28,9 @@ class attribute(object):
     def getFocusParent(self):
         return None
 
+    def hasID(self, current_type, first_free_id):
+        return False
+
 class binaryAttribute(attribute):
     """value type is binary"""
     def __init__(self, _name, _sounds, _value):
@@ -73,3 +76,9 @@ class multiAttribute(attribute):
             res = object.getFocusParent()
             if res is not None: return res
         return None
+
+    def hasID(self, current_type, first_free_id):
+        for object in self.value:
+            if object.hasID(current_type, first_free_id):
+                return True
+        return False

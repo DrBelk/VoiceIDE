@@ -30,9 +30,10 @@ class WordHandler(object):
         self.isBinaryTrue = True
         self.what_type_part = ''
         self.where_type_part = ''
+        self.next_is_id = False
 
         self.editing_attribute_type = None
-        self.nextIsNewValue = False
+        self.next_is_new_value = False
         self.editing_attribute_new_value = None
 
     def sendWord(self, word):
@@ -89,6 +90,18 @@ class WordHandler(object):
                 if del_id == id(object):
                     parent.remove(object)
 
+        def getNextTypeID(context, current_type):
+            first_free_id = 1
+            found = False
+            while not found:
+                found = True
+                for object in context:
+                    if object.hasID(current_type, first_free_id):
+                        first_free_id += 1
+                        found = False
+                        break
+            return first_free_id
+
         # load old command context, not just = operator to keep self.focus as pointer
         self.context.clear()
         self.context.extend(self.history.getCurrContext())
@@ -115,6 +128,8 @@ class WordHandler(object):
                                    _to = self.context)
 
         if self.action == CommandType.CREATE:
+            new_id = getNextTypeID(self.context, self.what.type)
+            self.what.attributes["id"].value = new_id
             self.focus.append(self.what)
         elif self.action == CommandType.DELETE:
             # find WHAT object in the context
@@ -139,14 +154,15 @@ class WordHandler(object):
     def try_apply(self, p):
         if "INFN" in p.tag:
             return self.parseAction(p)
-        elif self.nextIsNewValue: # should be before any other but verb
-            return self.setAttributeValue(p)
+        # should be before any other but verb
         elif not isinstance(self.what, str) and self.what.type == languageType.PART:
             return self.parseWhatObject(p)
         elif {"NOUN", "accs"} in p.tag:
             return self.parseWhatObject(p)
         elif {"NOUN", "gent"} in p.tag:
             return self.parseWhereObject(p)
+        elif {"NUMB"} in p.tag:
+            return self.parseNumber(p)
         elif {"PRCL"} in p.tag:
             return self.parseNot(p)
         elif {"PREP"} in p.tag:
@@ -158,6 +174,21 @@ class WordHandler(object):
         else:
             print("Unknown tag: ", p.tag)
             return False
+        return True
+
+    def parseNumber(self, p):
+        if self.next_is_id:
+            return self.parseID(p)
+        elif self.next_is_new_value:
+            return self.setAttributeValue(p)
+        else:
+            print("Unknown number place")
+            return False
+        return True
+
+    def parseID(self, p):
+        object = self.getCurrentObject()
+        object.attributes["id"].value = int(p.word)
         return True
 
     def setAttributeValue(self, p):
@@ -183,14 +214,14 @@ class WordHandler(object):
     def parsePrep(self, p):
         # find att
         if p.word == "на" and self.action == CommandType.CHANGE:
-            self.nextIsNewValue = True
+            self.next_is_new_value = True
             self.is_where_mode = False
         return True
 
     def parseNumbr(self, p):
         # find att
         if p.word == "на" and self.action == CommandType.CHANGE:
-            self.nextIsNewValue = True
+            self.next_is_new_value = True
             self.is_where_mode = False
         return True
 
@@ -224,7 +255,7 @@ class WordHandler(object):
     def parseWhatObject(self, p):
         def getTypePart():
             self.what.type = languageType.getType(self.what_type_part + p.normal_form)
-                
+            
             if self.what.type == languageType.NODEF:
                 print("Unknown WHAT object type!")
                 return False
@@ -234,13 +265,17 @@ class WordHandler(object):
                 self.what = languageType.getClass(self.what.type, self.what.attributes)
             else:
                 self.what_type_part += p.normal_form + " "
+            return True
         if self.action == CommandType.CREATE or self.action == CommandType.DELETE:
             # parse new object
-            getTypePart()
+            return getTypePart()
         if self.action == CommandType.CHANGE:
-            getTypePart()
-            if self.what.type == languageType.NODEF: # we have an attribute name
-                self.what = p.normal_form
+            if p.normal_form in ["номер"]:
+                self.next_is_id = True
+                return True
+            if not getTypePart():
+                if self.what.type == languageType.NODEF: # we have an attribute name
+                    self.what = p.normal_form
         return True
 
     def parseWhereObject(self, p):
@@ -258,11 +293,9 @@ class WordHandler(object):
         return True
 
     def parseName(self, p):
-        # Find out what object we should change
-        if self.is_where_mode:
-            object = self.where
-        else:
-            object = self.what
+        if self.next_is_new_value:
+            return self.setAttributeValue(p)
+        object = self.getCurrentObject()
 
         # parse the name of the object
         if "name" in object.attributes:
@@ -271,3 +304,11 @@ class WordHandler(object):
             else:
                 object.attributes["name"].value += p.normal_form[0].title() + p.normal_form[1:].lower()
         return True
+
+    def getCurrentObject(self):
+        # Find out what object we should change
+        if self.is_where_mode:
+            return self.where
+        else:
+            return self.what
+

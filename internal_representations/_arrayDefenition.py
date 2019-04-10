@@ -9,7 +9,7 @@ class _arrayDefenition(abstractObject):
     def __init__(self, _attributes = {}):
         super().__init__(languageType.ARRAY_DEF)
 
-        self.attributes = _attributes
+        self.attributes.update(_attributes)
         
         name = "name"
         self.attributes[name] = stringAttribute(name, ["имя", "название"], "")
@@ -28,4 +28,4 @@ class _arrayDefenition(abstractObject):
         string += "["
         string += str(self.attributes["size"].value);
         string += "];"
-        return string.replace("\t", " " * 4)
+        return self.reprCommon(string)

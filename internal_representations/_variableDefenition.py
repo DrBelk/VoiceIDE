@@ -9,7 +9,7 @@ class _variableDefenition(abstractObject):
     def __init__(self, _attributes = {}):
         super().__init__(languageType.CLASS)
 
-        self.attributes = _attributes
+        self.attributes.update(_attributes)
         
         name = "name"
         self.attributes[name] = stringAttribute(name, ["имя", "название"], "")
@@ -23,4 +23,4 @@ class _variableDefenition(abstractObject):
         string += " "
         string += self.attributes["name"].value if self.attributes["name"].value else "unnamedVariable"
         string += ";"
-        return string.replace("\t", " " * 4)
+        return self.reprCommon(string)
