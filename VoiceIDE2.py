@@ -12,9 +12,14 @@ from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
+from kivy.clock import Clock
 
 from kivy.uix.codeinput import CodeInput
 from pygments.lexers.c_cpp import CppLexer
+
+from kivy.config import Config
+Config.set('graphics', 'width', '600')
+Config.set('graphics', 'height', '800')
 
 class VoiceIDE(App):
     def __init__(self):
@@ -30,6 +35,7 @@ class VoiceIDE(App):
 
         # give init context representation
         self.code_out.text = self.wh.sendWord("")
+        self.beauty_block = False
         return super().__init__()
 
     def build(self):
@@ -39,19 +45,29 @@ class VoiceIDE(App):
         
         v_layout.add_widget(g_layout)
         v_layout.add_widget(self.code_out)
-        input_line = TextInput(size_hint = [1, 0.2])
-        input_line.text = PRE_TEXT
-        input_line.bind(text = self.sendWordIfSpace_s)
-        input_line.focus = True
-        v_layout.add_widget(input_line)
+        self.input_line = TextInput(size_hint = [1, 0.2])
+        self.input_line.text = PRE_TEXT
+        self.input_line.bind(text = self.sendWordIfSpace_s)
+        self.input_line.focus = True
+        v_layout.add_widget(self.input_line)
         return v_layout
 
     def sendWordIfSpace_s(self, instance, value):
-        if value.endswith(' ' * 2):
-            word_cmd_list = (value[:-1]).lower().split()
-            for word in word_cmd_list:
-                self.code_out.text = self.wh.sendWord(word)
-            instance.text = ""
+        #self.input_line.bind(text = self.sendWordIfSpace_s)
+        to_process = ' '.join(value.lower().split('  ')[:-1])
+        word_cmd_list = to_process.split()
+        for word in word_cmd_list:
+            self.code_out.text = self.wh.sendWord(word)
+        instance.text = ""
+
+        #else:
+        #    word_cmd_list = value.lower().split()
+        #    if word_cmd_list:
+        #        word = word_cmd_list[0]
+        #        self.input_line.unbind(text = self.sendWordIfSpace_s)
+        #        self.input_line.text = value[len(word) + 1:]
+        #        self.code_out.text = self.wh.sendWord(word)
+        #        Clock.schedule_once(lambda dt: self.sendWordIfSpace_s(instance, instance.text), 1)
 
     def switchMic(self, instance):
         if not self.listen:

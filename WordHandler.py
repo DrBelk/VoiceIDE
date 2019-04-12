@@ -250,7 +250,7 @@ class WordHandler(object):
         if self.action == CommandType.UNDO:
             self.context.clear()
             self.context.extend(self.history.undo())
-            return True
+        return True
 
     def parseWhatObject(self, p):
         def getTypePart():

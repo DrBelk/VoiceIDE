@@ -16,5 +16,5 @@ class _focus(abstractObject):
         self.attributes[name] = stringAttribute(name, ["имя", "название"], "")
 
     def __repr__(self):
-        string = "// We are here"
+        string = "@"
         return self.reprCommon(string)

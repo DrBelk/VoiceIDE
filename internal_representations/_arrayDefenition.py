@@ -24,7 +24,7 @@ class _arrayDefenition(abstractObject):
         string = ""
         string += self.attributes["type"].value if self.attributes["type"].value else "void"
         string += " "
-        string += self.attributes["name"].value if self.attributes["name"].value else "unnamedVariable"
+        string += self.attributes["name"].value if self.attributes["name"].value else "unnamedArray"
         string += "["
         string += str(self.attributes["size"].value);
         string += "];"

@@ -11,15 +11,10 @@ class _number(abstractObject):
 
         self.attributes.update(_attributes)
         
-        #name = "name"
-        #self.attributes[name] = stringAttribute(name, ["имя", "название"], "")
+        name = "val"
+        self.attributes[name] = intAttribute(name, ["значение"], 0)
 
     def __repr__(self):
-        string = "// Number stub;"
-        #str += self.attributes["type"].value if self.attributes["type"].value else "void"
-        #str += " "
-        #str += self.attributes["name"].value if self.attributes["name"].value else "unnamedVariable"
-        #str += "["
-        #str += self.attributes["size"].value if self.attributes["type"].value else 10;
-        #str += "];"
+        string = ""
+        str += str(self.attributes["val"].value)
         return self.reprCommon(string)
