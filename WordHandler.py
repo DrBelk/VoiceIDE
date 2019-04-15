@@ -177,10 +177,14 @@ class WordHandler(object):
         return True
 
     def parseNumber(self, p):
+        object = self.getCurrentObject()
         if self.next_is_id:
             return self.parseID(p)
         elif self.next_is_new_value:
             return self.setAttributeValue(p)
+        elif 'val' in object.attributes and \
+            isinstance(object.attributes['val'], intAttribute):
+            object.attributes['val'].value = int(p.word)
         else:
             print("Unknown number place")
             return False
@@ -218,13 +222,6 @@ class WordHandler(object):
             self.is_where_mode = False
         return True
 
-    def parseNumbr(self, p):
-        # find att
-        if p.word == "на" and self.action == CommandType.CHANGE:
-            self.next_is_new_value = True
-            self.is_where_mode = False
-        return True
-
     def parseNot(self, p):
         if p.word == "не":
             self.isBinaryTrue = False
@@ -253,6 +250,11 @@ class WordHandler(object):
         return True
 
     def parseWhatObject(self, p):
+        def checkIdPrefix():
+            if p.normal_form in ["номер"]:
+                self.next_is_id = True
+                return True
+            return False
         def getTypePart():
             self.what.type = languageType.getType(self.what_type_part + p.normal_form)
             
@@ -267,15 +269,14 @@ class WordHandler(object):
                 self.what_type_part += p.normal_form + " "
             return True
         if self.action == CommandType.CREATE or self.action == CommandType.DELETE:
-            # parse new object
-            return getTypePart()
+            if not checkIdPrefix():
+                # parse new object
+                return getTypePart()
         if self.action == CommandType.CHANGE:
-            if p.normal_form in ["номер"]:
-                self.next_is_id = True
-                return True
-            if not getTypePart():
-                if self.what.type == languageType.NODEF: # we have an attribute name
-                    self.what = p.normal_form
+            if not checkIdPrefix():
+                if not getTypePart():
+                    if self.what.type == languageType.NODEF: # we have an attribute name
+                        self.what = p.normal_form
         return True
 
     def parseWhereObject(self, p):

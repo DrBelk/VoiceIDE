@@ -17,9 +17,9 @@ class abstractObject(object):
     def __str__(self):
         return self.__repr__()
 
-    def reprCommon(self, child_repr):
+    def reprCommon(self, child_repr, is_put_id = True):
         string = ""
-        if "name" not in self.attributes:
+        if "name" not in self.attributes and is_put_id:
             string += "// id is "
             string += str(self.attributes["id"].value) + "\n"
         string += child_repr

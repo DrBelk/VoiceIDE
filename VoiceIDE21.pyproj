@@ -28,6 +28,7 @@
     <Compile Include="attribute.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="internal_representations\_method - Copy.py" />
     <Compile Include="internal_representations\_return.py" />
     <Compile Include="internal_representations\_number.py" />
     <Compile Include="internal_representations\_class.py">

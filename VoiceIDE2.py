@@ -54,11 +54,14 @@ class VoiceIDE(App):
 
     def sendWordIfSpace_s(self, instance, value):
         #self.input_line.bind(text = self.sendWordIfSpace_s)
-        to_process = ' '.join(value.lower().split('  ')[:-1])
-        word_cmd_list = to_process.split()
-        for word in word_cmd_list:
-            self.code_out.text = self.wh.sendWord(word)
-        instance.text = ""
+        if '  ' in value:
+            to_process = ' '.join(value.lower().split('  ')[:-1])
+            word_cmd_list = to_process.split()
+            for word in word_cmd_list:
+                self.code_out.text = self.wh.sendWord(word)
+            self.input_line.unbind(text = self.sendWordIfSpace_s)
+            self.input_line.text = value[len(to_process) + 2:]
+            self.input_line.bind(text = self.sendWordIfSpace_s)
 
         #else:
         #    word_cmd_list = value.lower().split()

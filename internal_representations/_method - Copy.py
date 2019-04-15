@@ -1,0 +1,38 @@
+from abstractObject import *
+from attribute import *
+from languageType import languageType
+from helpFunctions import str2
+
+class _include(abstractObject):
+    """Represents C++ include"""
+
+    def __init__(self, _attributes = {}):
+        super().__init__(languageType.INCLUDE)
+
+        self.attributes.update(_attributes)
+                
+        name = "retType"
+        self.attributes[name] = stringAttribute(name, ["возврат"], "")
+
+        name = "params"
+        self.attributes[name] = multiAttribute(name, ["параметр"], [])
+
+        name = "body"
+        self.attributes[name] =  multiAttribute(name, ["тело", "реализация"], [])
+
+        name = "isStatic"
+        self.attributes[name] =  binaryAttribute(name, ["статический"], False)
+
+    def __repr__(self):
+        string =  "static " if self.attributes["isStatic"].value else ""
+        string += self.attributes["retType"].value if self.attributes["retType"].value else "void"
+        string += " "
+        string += self.attributes["name"].value if self.attributes["name"].value else "unnamedMethod"
+        string += "("
+        for param in self.attributes["params"].value:
+            string += str2(param) + ", "
+        string += ") {\n"
+        for body_element in self.attributes["body"].value:
+            string += "\t" + str2(body_element).replace("\n", "\n\t") + "\n"
+        string += "}"
+        return self.reprCommon(string)

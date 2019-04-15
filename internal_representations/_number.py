@@ -7,7 +7,7 @@ class _number(abstractObject):
     """Represents defeniton of a variable"""
 
     def __init__(self, _attributes = {}):
-        super().__init__(languageType.CLASS)
+        super().__init__(languageType.NUMBER)
 
         self.attributes.update(_attributes)
         
@@ -15,6 +15,8 @@ class _number(abstractObject):
         self.attributes[name] = intAttribute(name, ["значение"], 0)
 
     def __repr__(self):
-        string = ""
-        str += str(self.attributes["val"].value)
-        return self.reprCommon(string)
+        string = "/*ID:"
+        string += str(self.attributes["id"].value)
+        string += "*/"
+        string += str(self.attributes["val"].value)
+        return self.reprCommon(string, False)
