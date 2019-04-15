@@ -33,6 +33,7 @@ class WordHandler(object):
         self.next_is_id = False
 
         self.editing_attribute_type = None
+        self.next_is_value = False
         self.next_is_new_value = False
         self.editing_attribute_new_value = None
 
@@ -177,14 +178,12 @@ class WordHandler(object):
         return True
 
     def parseNumber(self, p):
-        object = self.getCurrentObject()
         if self.next_is_id:
             return self.parseID(p)
         elif self.next_is_new_value:
             return self.setAttributeValue(p)
-        elif 'val' in object.attributes and \
-            isinstance(object.attributes['val'], intAttribute):
-            object.attributes['val'].value = int(p.word)
+        elif self.next_is_value:
+            return self.setNewObjectValue(p)
         else:
             print("Unknown number place")
             return False
@@ -193,6 +192,18 @@ class WordHandler(object):
     def parseID(self, p):
         object = self.getCurrentObject()
         object.attributes["id"].value = int(p.word)
+        return True
+
+    def setNewObjectValue(self, p):
+        object = self.getCurrentObject()
+        if 'val' in object.attributes:
+            if isinstance(object.attributes['val'], intAttribute):
+                object.attributes['val'].value = int(p.word)
+            if isinstance(object.attributes['val'], stringAttribute):
+                object.attributes['val'].value = p.word
+        else:
+            return False
+        self.next_is_value = False
         return True
 
     def setAttributeValue(self, p):
@@ -265,6 +276,8 @@ class WordHandler(object):
             if self.what.type != languageType.PART:
                 self.what_type_part = ""
                 self.what = languageType.getClass(self.what.type, self.what.attributes)
+                # once we get a class next is value or the name
+                self.next_is_value = True
             else:
                 self.what_type_part += p.normal_form + " "
             return True
@@ -294,8 +307,15 @@ class WordHandler(object):
         return True
 
     def parseName(self, p):
+        res = False
         if self.next_is_new_value:
-            return self.setAttributeValue(p)
+            res =  self.setAttributeValue(p)
+        elif self.next_is_value:
+            res = self.setNewObjectValue(p)
+        # parce the name if object does not consist val
+        if res:
+            return res
+
         object = self.getCurrentObject()
 
         # parse the name of the object
@@ -312,4 +332,3 @@ class WordHandler(object):
             return self.where
         else:
             return self.what
-

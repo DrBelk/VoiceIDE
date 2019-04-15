@@ -18,6 +18,7 @@ class languageType(Enum):
     CYCLE           = auto()
     CONDITION       = auto()
     NUMBER          = auto()
+    INCLUDE         = auto()
     PARAMETER       = auto()
 
     def getSounds(id):
@@ -37,6 +38,7 @@ class languageType(Enum):
             languageType.CYCLE:         ['цикл'],
             languageType.CONDITION:     ['условие'],
             languageType.NUMBER:        ['число'],
+            languageType.INCLUDE:       ['включение библиотеки', 'библиотека'],
             languageType.PARAMETER:     ["параметр"]
                  }
         return sounds[id]
@@ -50,6 +52,7 @@ class languageType(Enum):
         from _variableDefenition import _variableDefenition
         from _arrayDefenition import _arrayDefenition
         from _number import _number
+        from _include import _include
         class_type = {
             languageType.FOCUS:         _focus,
             languageType.CLASS:         _class,
@@ -61,6 +64,7 @@ class languageType(Enum):
             languageType.CYCLE:         None,
             languageType.CONDITION:     None,
             languageType.NUMBER:        _number,
+            languageType.INCLUDE:       _include,
             languageType.PARAMETER:     None
                      }      
         return class_type[id](attributes)
