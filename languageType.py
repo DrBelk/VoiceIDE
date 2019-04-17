@@ -32,7 +32,7 @@ class languageType(Enum):
             languageType.CLASS:         ['класс', 'объект'],
             languageType.METHOD:        ['метод', 'функция'],
             languageType.RETURN:        ['возврат'],
-            languageType.VARIABLE:      ['переменная'],
+            languageType.VARIABLE:      ['переменная', 'переменный'],
             languageType.VARIABLE_DEF:  ['определение переменной'],
             languageType.ARRAY_DEF:     ['определение массива'],
             languageType.CYCLE:         ['цикл'],
@@ -50,18 +50,20 @@ class languageType(Enum):
         from _return import _return
         from _focus import _focus
         from _variableDefenition import _variableDefenition
+        from _variable import _variable
         from _arrayDefenition import _arrayDefenition
         from _number import _number
+        from _cycle import _cycle
         from _include import _include
         class_type = {
             languageType.FOCUS:         _focus,
             languageType.CLASS:         _class,
             languageType.METHOD:        _method,
             languageType.RETURN:        _return,
-            languageType.VARIABLE:      None,
+            languageType.VARIABLE:      _variable,
             languageType.VARIABLE_DEF:  _variableDefenition,
             languageType.ARRAY_DEF:     _arrayDefenition,
-            languageType.CYCLE:         None,
+            languageType.CYCLE:         _cycle,
             languageType.CONDITION:     None,
             languageType.NUMBER:        _number,
             languageType.INCLUDE:       _include,

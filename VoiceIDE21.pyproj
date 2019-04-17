@@ -29,6 +29,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="internal_representations\_include.py" />
+    <Compile Include="internal_representations\_cycle.py" />
     <Compile Include="internal_representations\_return.py" />
     <Compile Include="internal_representations\_number.py" />
     <Compile Include="internal_representations\_class.py">
@@ -45,6 +46,7 @@
     <Compile Include="internal_representations\_focus.py" />
     <Compile Include="internal_representations\_method.py" />
     <Compile Include="internal_representations\_arrayDefenition.py" />
+    <Compile Include="internal_representations\_variable.py" />
     <Compile Include="internal_representations\_variableDefenition.py">
       <SubType>Code</SubType>
     </Compile>

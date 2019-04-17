@@ -39,6 +39,7 @@ class WordHandler(object):
 
     def sendWord(self, word):
         """Processes a word from any word generator depending on the current state"""
+
         print('[sendWord] hanlde word:', word)
         # request of empty word means no changes
         if not word:
@@ -158,7 +159,7 @@ class WordHandler(object):
         # should be before any other but verb
         elif not isinstance(self.what, str) and self.what.type == languageType.PART:
             return self.parseWhatObject(p)
-        elif {"NOUN", "accs"} in p.tag:
+        elif {"accs"} in p.tag and {"NOUN"} in p.tag or {"ADJF"} in p.tag: # noun or ajective
             return self.parseWhatObject(p)
         elif {"NOUN", "gent"} in p.tag:
             return self.parseWhereObject(p)
@@ -332,3 +333,5 @@ class WordHandler(object):
             return self.where
         else:
             return self.what
+
+    

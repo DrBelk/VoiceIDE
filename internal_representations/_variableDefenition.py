@@ -7,7 +7,7 @@ class _variableDefenition(abstractObject):
     """Represents defeniton of a variable"""
 
     def __init__(self, _attributes = {}):
-        super().__init__(languageType.CLASS)
+        super().__init__(languageType.VARIABLE_DEF)
 
         self.attributes.update(_attributes)
         
