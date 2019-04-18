@@ -1,0 +1,7 @@
+class potatoClass {
+    void getPotato() {
+    }
+    void test() {
+        @
+    }
+}

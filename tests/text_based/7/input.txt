@@ -1,0 +1,1 @@
+добавить метод test method изменить имя метода test method на changed method добавить метод test method редактировать тело метода test method

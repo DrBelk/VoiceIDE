@@ -1,0 +1,1 @@
+добавить класс potato class изменить тело класса potato class создать метод get potato создать метод test изменить тело метода test создать метод test inside отменить 

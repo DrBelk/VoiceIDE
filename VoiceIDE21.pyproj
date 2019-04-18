@@ -20,7 +20,29 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="ideas.txt" />
-    <Content Include="tests\1\input.txt" />
+    <Content Include="tests\text_based\10\input.txt" />
+    <Content Include="tests\text_based\10\output.txt" />
+    <Content Include="tests\text_based\11\input.txt" />
+    <Content Include="tests\text_based\11\output.txt" />
+    <Content Include="tests\text_based\1\input.txt" />
+    <Content Include="tests\text_based\1\output.txt" />
+    <Content Include="tests\text_based\2\input.txt" />
+    <Content Include="tests\text_based\2\output.txt" />
+    <Content Include="tests\text_based\3\input.txt" />
+    <Content Include="tests\text_based\3\output.txt" />
+    <Content Include="tests\text_based\4\input.txt" />
+    <Content Include="tests\text_based\4\output.txt" />
+    <Content Include="tests\text_based\5\input.txt" />
+    <Content Include="tests\text_based\5\output.txt" />
+    <Content Include="tests\text_based\6\input.txt" />
+    <Content Include="tests\text_based\6\output.txt" />
+    <Content Include="tests\text_based\7\input.txt" />
+    <Content Include="tests\text_based\7\output.txt" />
+    <Content Include="tests\text_based\8\input.txt" />
+    <Content Include="tests\text_based\8\output.txt" />
+    <Content Include="tests\text_based\9\input.txt" />
+    <Content Include="tests\text_based\9\output.txt" />
+    <Content Include="tests\voice_based\1\input.wav" />
     <Content Include="VoiceIDE-45661bc8c02b.json" />
   </ItemGroup>
   <ItemGroup>
@@ -54,13 +76,29 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="soundHandler.py" />
+    <Compile Include="tests\regression_tests.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="VoiceIDE2.py" />
     <Compile Include="WordHandler.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="internal_representations" />
     <Folder Include="tests\" />
-    <Folder Include="tests\1" />
+    <Folder Include="tests\text_based\" />
+    <Folder Include="tests\text_based\10\" />
+    <Folder Include="tests\text_based\11\" />
+    <Folder Include="tests\text_based\1\" />
+    <Folder Include="tests\text_based\2\" />
+    <Folder Include="tests\text_based\3\" />
+    <Folder Include="tests\text_based\4\" />
+    <Folder Include="tests\text_based\5\" />
+    <Folder Include="tests\text_based\6\" />
+    <Folder Include="tests\text_based\7\" />
+    <Folder Include="tests\text_based\8\" />
+    <Folder Include="tests\text_based\9\" />
+    <Folder Include="tests\voice_based\" />
+    <Folder Include="tests\voice_based\1\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
 </Project>

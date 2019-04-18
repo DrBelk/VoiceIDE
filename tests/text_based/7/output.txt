@@ -1,0 +1,6 @@
+void changedMethod() {
+}
+
+void testMethod() {
+    @
+}

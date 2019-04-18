@@ -36,7 +36,7 @@ class languageType(Enum):
             languageType.VARIABLE_DEF:  ['определение переменной'],
             languageType.ARRAY_DEF:     ['определение массива'],
             languageType.CYCLE:         ['цикл'],
-            languageType.CONDITION:     ['условие'],
+            languageType.CONDITION:     ['условие языка'],
             languageType.NUMBER:        ['число'],
             languageType.INCLUDE:       ['включение библиотеки', 'библиотека'],
             languageType.PARAMETER:     ["параметр"]

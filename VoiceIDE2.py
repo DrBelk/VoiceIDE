@@ -18,8 +18,8 @@ from kivy.uix.codeinput import CodeInput
 from pygments.lexers.c_cpp import CppLexer
 
 from kivy.config import Config
-Config.set('graphics', 'width', '600')
-Config.set('graphics', 'height', '800')
+Config.set('graphics', 'width', '250')
+Config.set('graphics', 'height', '500')
 
 class VoiceIDE(App):
     def __init__(self):
@@ -53,7 +53,6 @@ class VoiceIDE(App):
         return v_layout
 
     def sendWordIfSpace_s(self, instance, value):
-        #self.input_line.bind(text = self.sendWordIfSpace_s)
         if '  ' in value:
             to_process = ' '.join(value.lower().split('  ')[:-1])
             word_cmd_list = to_process.split()
@@ -63,16 +62,13 @@ class VoiceIDE(App):
             self.input_line.text = value[len(to_process) + 2:]
             self.input_line.bind(text = self.sendWordIfSpace_s)
 
-        #else:
-        #    word_cmd_list = value.lower().split()
-        #    if word_cmd_list:
-        #        word = word_cmd_list[0]
-        #        self.input_line.unbind(text = self.sendWordIfSpace_s)
-        #        self.input_line.text = value[len(word) + 1:]
-        #        self.code_out.text = self.wh.sendWord(word)
-        #        Clock.schedule_once(lambda dt: self.sendWordIfSpace_s(instance, instance.text), 1)
-
     def switchMic(self, instance):
+        num = NUM
+        with open("tests/text_based/" + str(num) + "/input.txt", "w") as text_file:
+            text_file.write(PRE_TEXT)
+        with open("tests/text_based/" + str(num) + "/output.txt", "w") as text_file:
+            text_file.write(self.code_out.text)        
+        return # TODO: kill me before release
         if not self.listen:
             instance.text = "Выключить микрофон"
             self.listen = True

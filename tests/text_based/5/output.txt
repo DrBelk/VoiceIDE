@@ -1,0 +1,4 @@
+void main() {
+    // id is 1
+    return /*ID:1*/7@;
+}

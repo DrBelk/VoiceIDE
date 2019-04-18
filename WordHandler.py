@@ -159,6 +159,8 @@ class WordHandler(object):
         # should be before any other but verb
         elif not isinstance(self.what, str) and self.what.type == languageType.PART:
             return self.parseWhatObject(p)
+        elif {"ADJF", "ablt"} in p.tag:
+            return self.parseWhatBinary(p)
         elif {"accs"} in p.tag and {"NOUN"} in p.tag or {"ADJF"} in p.tag: # noun or ajective
             return self.parseWhatObject(p)
         elif {"NOUN", "gent"} in p.tag:
@@ -169,8 +171,7 @@ class WordHandler(object):
             return self.parseNot(p)
         elif {"PREP"} in p.tag:
             return self.parsePrep(p)
-        elif {"ADJF", "ablt"} in p.tag:
-            return self.parseWhatBinary(p)
+        
         elif {"LATN"} in p.tag:
             return self.parseName(p)
         else:
@@ -269,13 +270,12 @@ class WordHandler(object):
             return False
         def getTypePart():
             self.what.type = languageType.getType(self.what_type_part + p.normal_form)
-            
+
             if self.what.type == languageType.NODEF:
                 print("Unknown WHAT object type!")
                 return False
             # change abstract class to special one
             if self.what.type != languageType.PART:
-                self.what_type_part = ""
                 self.what = languageType.getClass(self.what.type, self.what.attributes)
                 # once we get a class next is value or the name
                 self.next_is_value = True
@@ -290,7 +290,13 @@ class WordHandler(object):
             if not checkIdPrefix():
                 if not getTypePart():
                     if self.what.type == languageType.NODEF: # we have an attribute name
-                        self.what = p.normal_form
+                        if not self.what_type_part:
+                            self.what = p.normal_form
+                        else:
+                            self.what = self.what_type_part.split()[0]
+                            for word in self.what_type_part.split()[1:]:
+                                self.sendWord(word)
+                            self.sendWord(p.word)
         return True
 
     def parseWhereObject(self, p):

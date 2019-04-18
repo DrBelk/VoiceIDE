@@ -1,0 +1,5 @@
+void main() {
+    void ret;
+    // id is 1
+    return ret@;
+}
