@@ -1,14 +1,14 @@
 from helpFunctions import soundDiff
-from enum import Enum, auto
+from enum import Enum#, auto
 
 class CommandType(Enum):
     """Types of natural language commands"""
-    NODEF	= auto()
-    CREATE	= auto()
-    DELETE	= auto()
-    CHANGE	= auto()
-    UNDO	= auto()
-    REDO	= auto()
+    NODEF	= 1
+    CREATE	= 2
+    DELETE	= 3
+    CHANGE	= 4
+    UNDO	= 5
+    REDO	= 6
 
     def getSounds(id):
         return sounds[id]
