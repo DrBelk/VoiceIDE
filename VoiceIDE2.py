@@ -63,11 +63,18 @@ class VoiceIDE(App):
             self.input_line.bind(text = self.sendWordIfSpace_s)
 
     def switchMic(self, instance):
-        num = NUM
-        with open("tests/text_based/" + str(num) + "/input.txt", "w") as text_file:
+        dir_num = 12
+        test_dir_name = "tests/text_based/" + str(dir_num)
+        while os.path.exists(test_dir_name):
+            test_dir_name = "tests/text_based/" + str(dir_num)
+            dir_num += 1
+        dir_num -= 1
+        os.mkdir(test_dir_name)
+        with open(test_dir_name + "/input.txt", "w") as text_file:
             text_file.write(PRE_TEXT)
-        with open("tests/text_based/" + str(num) + "/output.txt", "w") as text_file:
-            text_file.write(self.code_out.text)        
+        with open(test_dir_name + "/output.txt", "w") as text_file:
+            text_file.write(self.code_out.text)
+        print('Test ' + str(dir_num) + ' successfully created')
         return # TODO: kill me before release
         if not self.listen:
             instance.text = "Выключить микрофон"

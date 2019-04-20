@@ -29,3 +29,5 @@ print ('Passed: ' + str(passed) + '/' + str(passed + failed))
 failed_tests = failed_tests[:-2] if failed_tests else failed_tests
 if failed:
     print ('Failed numbers: ' + failed_tests)
+
+input("Press Enter to close the test results...")

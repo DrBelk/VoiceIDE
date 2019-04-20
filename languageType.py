@@ -18,6 +18,7 @@ class languageType(Enum):
     CYCLE           = auto()
     CONDITION       = auto()
     NUMBER          = auto()
+    STRING          = auto()
     INCLUDE         = auto()
     PARAMETER       = auto()
 
@@ -38,6 +39,7 @@ class languageType(Enum):
             languageType.CYCLE:         ['цикл'],
             languageType.CONDITION:     ['условие языка'],
             languageType.NUMBER:        ['число'],
+            languageType.STRING:        ['строка'],
             languageType.INCLUDE:       ['включение библиотеки', 'библиотека'],
             languageType.PARAMETER:     ["параметр"]
                  }
@@ -53,7 +55,10 @@ class languageType(Enum):
         from _variable import _variable
         from _arrayDefenition import _arrayDefenition
         from _number import _number
+        from _stringClass import _stringClass
         from _cycle import _cycle
+        from _condition import _condition
+        from _param import _param
         from _include import _include
         class_type = {
             languageType.FOCUS:         _focus,
@@ -64,10 +69,11 @@ class languageType(Enum):
             languageType.VARIABLE_DEF:  _variableDefenition,
             languageType.ARRAY_DEF:     _arrayDefenition,
             languageType.CYCLE:         _cycle,
-            languageType.CONDITION:     None,
+            languageType.CONDITION:     _condition,
             languageType.NUMBER:        _number,
+            languageType.STRING:        _stringClass,
             languageType.INCLUDE:       _include,
-            languageType.PARAMETER:     None
+            languageType.PARAMETER:     _param
                      }      
         return class_type[id](attributes)
 

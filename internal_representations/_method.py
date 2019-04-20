@@ -18,7 +18,7 @@ class _method(abstractObject):
         self.attributes[name] = stringAttribute(name, ["возврат"], "")
 
         name = "params"
-        self.attributes[name] = multiAttribute(name, ["параметр"], [])
+        self.attributes[name] = multiAttribute(name, ["вход"], [])
 
         name = "body"
         self.attributes[name] =  multiAttribute(name, ["тело", "реализация"], [])
@@ -32,8 +32,9 @@ class _method(abstractObject):
         string += " "
         string += self.attributes["name"].value if self.attributes["name"].value else "unnamedMethod"
         string += "("
-        for param in self.attributes["params"].value:
+        for param in self.attributes["params"].value[:-1]:
             string += str2(param) + ", "
+        string += str2(self.attributes["params"].value[-1]) if self.attributes["params"].value else ""
         string += ") {\n"
         for body_element in self.attributes["body"].value:
             string += "\t" + str2(body_element).replace("\n", "\n\t") + "\n"

@@ -1,0 +1,9 @@
+// id is 1
+if () {
+    // id is 1
+    return ;
+} else {
+    // id is 2
+    return ;
+    @
+}

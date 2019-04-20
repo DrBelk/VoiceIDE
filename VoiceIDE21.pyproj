@@ -50,8 +50,10 @@
     <Compile Include="attribute.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="internal_representations\_condition.py" />
     <Compile Include="internal_representations\_include.py" />
     <Compile Include="internal_representations\_cycle.py" />
+    <Compile Include="internal_representations\_stringClass.py" />
     <Compile Include="internal_representations\_return.py" />
     <Compile Include="internal_representations\_number.py" />
     <Compile Include="internal_representations\_class.py">
@@ -69,6 +71,7 @@
     <Compile Include="internal_representations\_method.py" />
     <Compile Include="internal_representations\_arrayDefenition.py" />
     <Compile Include="internal_representations\_variable.py" />
+    <Compile Include="internal_representations\_param.py" />
     <Compile Include="internal_representations\_variableDefenition.py">
       <SubType>Code</SubType>
     </Compile>
@@ -76,7 +79,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="soundHandler.py" />
-    <Compile Include="tests\regression_tests.py">
+    <Compile Include="!regression_tests.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="VoiceIDE2.py" />
