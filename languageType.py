@@ -1,25 +1,25 @@
 import sys
 sys.path.append('internal_representations')
 
-from enum import Enum, auto
+from enum import Enum#, auto
 from helpFunctions import soundDiff
 
 class languageType(Enum):
-    NODEF           = auto()
-    CODE            = auto()
-    PART            = auto()
-    FOCUS           = auto()
-    CLASS           = auto()
-    METHOD          = auto()
-    RETURN          = auto()
-    VARIABLE        = auto()
-    VARIABLE_DEF    = auto()
-    ARRAY_DEF       = auto()
-    CYCLE           = auto()
-    CONDITION       = auto()
-    NUMBER          = auto()
-    INCLUDE         = auto()
-    PARAMETER       = auto()
+    NODEF           = 1
+    CODE            = 2
+    PART            = 3
+    FOCUS           = 4
+    CLASS           = 5
+    METHOD          = 6
+    RETURN          = 7
+    VARIABLE        = 8
+    VARIABLE_DEF    = 9
+    ARRAY_DEF       = 10
+    CYCLE           = 11
+    CONDITION       = 12
+    NUMBER          = 13
+    INCLUDE         = 14
+    PARAMETER       = 15
 
     def getSounds(id):
         sounds = {
