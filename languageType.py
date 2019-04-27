@@ -13,7 +13,7 @@ class languageType(Enum):
     METHOD          = 6
     RETURN          = 7
     VARIABLE        = 8
-    VARIABLE_DEF    = 9
+    VARIABLE_DEF    = 9z
     ARRAY_DEF       = 10
     CYCLE           = 11
     CONDITION       = 12
