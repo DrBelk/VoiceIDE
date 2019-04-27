@@ -20,6 +20,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="ideas.txt" />
+    <Content Include="Kursovaya_magistratura_1_kurs.docx" />
     <Content Include="tests\text_based\10\input.txt" />
     <Content Include="tests\text_based\10\output.txt" />
     <Content Include="tests\text_based\11\input.txt" />
@@ -44,6 +45,9 @@
     <Content Include="tests\text_based\9\output.txt" />
     <Content Include="tests\voice_based\1\input.wav" />
     <Content Include="VoiceIDE-45661bc8c02b.json" />
+    <Content Include="Курсовая магистратура 2 курс.docx" />
+    <Content Include="НИР отчёт.docx" />
+    <Content Include="Отчёт по практике.docx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="abstractObject.py" />
